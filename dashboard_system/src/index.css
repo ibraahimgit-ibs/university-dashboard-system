@@ -1,0 +1,252 @@
+@import "tailwindcss";
+@import "tailwind-scrollbar-hide/v4";
+
+@layer base {
+  * {
+    @apply m-0 p-0 font-sans;
+  }
+
+  html,
+  body {
+    @apply scrollbar-hide;
+  }
+}
+
+@layer components {
+  .role_btn {
+    @apply flex text-center border px-2 rounded-lg text-[13px] border-gray-300 p-2 py-0  font-semibold bg-blue-100 text-blue-700;
+  }
+
+  .selected {
+    @apply bg-gray-200;
+  }
+
+  tr {
+    @apply text-left border-b border-b-gray-300 py-5 hover:bg-gray-100 transition;
+  }
+  th {
+    @apply h-10 px-2;
+  }
+  td {
+    @apply p-2;
+  }
+
+  .a,
+  .ab,
+  .overdue,
+  .pending,
+  .paid {
+    @apply inline-flex items-center justify-center text-white bg-black px-2 py-0.5 rounded-md text-sm;
+  }
+
+  .paybtn {
+    @apply p-1.5 px-3 border rounded-md border-gray-300 hover:bg-gray-200 transition duration-400;
+  }
+
+  header {
+    @apply w-full max-w-7xl mx-auto;
+  }
+
+  /* .root {
+    @apply relative w-full max-w-7xl  mx-auto;
+  } */
+
+  thead {
+    @apply w-full;
+  }
+
+  .Q_actions {
+    @apply bg-white py-1 text-sm rounded-md font-semibold border border-gray-300 text-center;
+  }
+
+  .sbo_btn {
+    @apply w-full text-center m-1 py-0.5 rounded-full font-semibold;
+  }
+
+  .up_ex_divs {
+    @apply flex items-center gap-2 border border-gray-300 px-1 py-0.5 rounded-md font-semibold cursor-pointer transition-all;
+  }
+
+  .form_control {
+    @apply border border-gray-400 p-1 px-2 outline-0 rounded-md focus:border-blue-500 transition;
+  }
+
+  .form_btn {
+    @apply bg-blue-300 hover:bg-blue-400 border border-gray-400 p-1 px-2 w-full outline-0 rounded-md focus:border-blue-500 transition;
+  }
+
+  .edit_grade_window_inputs {
+    @apply bg-gray-100 w-full py-1.5 px-3 outline-0 rounded-md outline-gray-300 focus:outline-5 transition duration-500;
+  }
+}
+
+body {
+  font-family: sans-serif;
+}
+
+/* ****************************Dark mode********************** */
+.dark {
+  background: black;
+  transition: 0.3s;
+
+  h1,
+  h2,
+  p,
+  input,
+  div {
+    color: #ffffff;
+  }
+
+  div {
+    background: #000000;
+    color: white;
+  }
+
+  button {
+    color: black;
+    background: white;
+  }
+
+  .person_icon {
+    fill: white;
+  }
+
+  .st-h {
+    background: white;
+    color: blue;
+  }
+
+  .selected,
+  .percent_cardg {
+    background: rgb(103, 103, 103);
+  }
+
+  .percent_card {
+    background: aqua;
+  }
+
+  .grades_icon {
+    fill: white;
+  }
+
+  .sl {
+    background: rgb(1, 1, 211);
+  }
+
+  .isdarkCard {
+    color: aqua;
+  }
+
+  .isdarkSidebar {
+    background: rgba(255, 255, 255, 0.307);
+  }
+
+  tr:hover {
+    background-color: #3d3d3d4c;
+  }
+
+  .paybtn:hover {
+    background-color: #ffffffad;
+  }
+  .paid {
+    background: white;
+    color: black;
+  }
+
+  .modal {
+    background-color: rgba(0, 0, 0, 0.415);
+
+    p {
+      color: gray;
+    }
+
+    .btn1 {
+      background: black;
+      color: white;
+      border: 1px solid rgb(45, 45, 45);
+    }
+
+    .btn2 {
+      background: white;
+    }
+
+    .btn2:hover {
+      background: rgba(255, 255, 255, 0.786);
+    }
+
+    .paymodaldiv {
+      background-color: #070707;
+      border: 1px solid rgba(128, 128, 128, 0.47);
+    }
+
+    .amountdueDIv {
+      background: #1c1c1c;
+
+      div {
+        background: none;
+      }
+    }
+  }
+
+  .crosIcon {
+    background: black;
+    color: gray;
+  }
+
+  .crosIcon:hover {
+    color: rgba(128, 128, 128, 0.73);
+  }
+
+  .a {
+    background-color: white;
+    color: black;
+  }
+
+  .ab,
+  .pending {
+    background: rgba(128, 128, 128, 0.429);
+    color: white;
+  }
+
+  .st_H {
+    background-color: #b9c5fd;
+    color: blue;
+  }
+
+  .sbo_H {
+    background-color: #dafdda;
+    color: green;
+  }
+
+  .reg_H {
+    background-color: #ffe9ff;
+    color: purple;
+  }
+
+  .sup_H {
+    background-color: #fbe7e7;
+    color: rgb(186, 0, 0);
+  }
+
+  .sbo_dashboard_option {
+    background: rgb(58, 58, 58);
+    color: white;
+  }
+
+  .sbo_btn {
+    background: rgb(58, 58, 58);
+    color: white;
+  }
+
+  .selected_sbo_btn {
+    background: white;
+    color: black;
+  }
+
+  .form_control,
+  .form_btn,
+  .form_H {
+    color: black;
+  }
+}
+/* ****************************Dark mode********************** */
