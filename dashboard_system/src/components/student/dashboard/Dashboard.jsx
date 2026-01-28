@@ -23,6 +23,24 @@ const Dashboard = () => {
 
     const studentGrades = grades?.filter( grade => grade.student_id === student.id );
 
+    function getLetterGrade( percentage ) {
+        if ( percentage >= 90 ) return "A";
+        else if ( percentage >= 80 ) return "B";
+        else if ( percentage >= 70 ) return "C";
+        else if ( percentage >= 60 ) return "D";
+        else if ( percentage >= 50 ) return "E";
+        else return "F";
+    }
+
+    function getRowColor( percentage ) {
+        if ( percentage >= 90 ) return "bg-green-600 text-white";   // A → Green
+        else if ( percentage >= 80 ) return "bg-blue-600 text-white"; // B → Blue
+        else if ( percentage >= 70 ) return "bg-gray-400 text-white"; // C → Yellow
+        else if ( percentage >= 60 ) return "bg-black text-white"; // D → Orange
+        else if ( percentage >= 50 ) return "bg-red-600 text-white"; // E → Purple
+        else return "bg-purple-600 text-white"; // F → Red
+    }
+
 
     return (
         <div className="max-w-full min-w-full">
@@ -61,15 +79,19 @@ const Dashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.isArray( studentGrades ) && studentGrades?.map( ( grade, i ) => (
-                                <tr key={i}>
-                                    <td>{grade?.subject}</td>
-                                    <td>{grade?.grade}%</td>
-                                    <td ><span className="a">A-</span></td>
-                                    <td>{grade?.term}</td>
-                                    <td>{grade?.enrolment_date}</td>
-                                </tr>
-                            ) )}
+                            {Array.isArray( studentGrades ) && studentGrades?.map( ( grade, i ) => {
+                                const letter = getLetterGrade( grade?.grade );
+
+                                return (
+                                    <tr key={i}>
+                                        <td>{grade?.subject}</td>
+                                        <td>{grade?.grade}%</td>
+                                        <td ><span className={`a ${ getRowColor( grade.grade ) }`}>{letter}</span></td>
+                                        <td>{grade?.term}</td>
+                                        <td>{grade?.enrolment_date}</td>
+                                    </tr>
+                                )
+                            } )}
                         </tbody>
                     </table>
                 </div>

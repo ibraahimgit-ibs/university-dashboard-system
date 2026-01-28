@@ -43,25 +43,9 @@ export const gradeEntryWindowState = atom( {
   default: false
 } )
 
-export const gradeEntryDataState = atom( {
-  key: 'gradeEntryDataState',
-  default: {
-    Mathematics: 0,
-    English_Literature: 0,
-    Chemistry: 0,
-    History: 0,
-    physics: 0
-  }
-} )
-
 export const gradeEntryClickedDataState = atom( {
   key: 'gradeEntryClickedState',
-  default: 0,
-} )
-
-export const gradeEntryClickedNowState = atom( {
-  key: 'gradeEntryClickedNowState',
-  default: "",
+  default: null,
 } )
 
 export const gradeEntryLettersState = atom( {

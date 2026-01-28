@@ -15,7 +15,7 @@ export const studentData = async ( req, res ) => {
   try {
     const studentsResult = await pool.query( 'SELECT * FROM students' );
     const subjectsResult = await pool.query( 'SELECT * FROM subjects' );
-    const GradesResult = await pool.query( 'SELECT s.f_name, sub.sub_name AS subject, t.term_name AS term, g.grade, g.enrolment_date, student_id FROM grades g JOIN students s ON g.student_id = s.id JOIN subjects sub ON g.subject_id = sub.id JOIN terms t ON g.term_id = t.id;' );
+    const GradesResult = await pool.query( 'SELECT s.f_name, sub.sub_name AS subject, t.term_name AS term, g.id, g.grade, g.enrolment_date, g.student_id, g.subject_id, g.term_id FROM grades g JOIN students s ON g.student_id = s.id JOIN subjects sub ON g.subject_id = sub.id JOIN terms t ON g.term_id = t.id;' );
 
     // Map students oo password oo delete password si aan front uga muuqan
     const students = studentsResult.rows.map( student => {
@@ -89,9 +89,69 @@ export const registStudent = async ( req, res ) => {
       [f_name, s_name, l_name, gender, hashedPassword]
     )
 
-    res.status( 201 ).json( result.rows[0] );
+    res.status( 201 ).send( "Registered Successfully" );
 
   } catch ( error ) {
     res.status( 400 ).send( error.message );
   }
 }
+
+export const addGrades = async ( req, res ) => {
+  const { student_id, subject_id, term_id, grade } = req.body;
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO grades (student_id, subject_id, term_id, grade)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [student_id, subject_id, term_id, grade]
+    );
+
+    res.json( { updated: result.rows[0] } );
+
+  } catch ( err ) {
+    console.error( err );
+    res.status( 500 ).json( { error: 'Failed to add grade' } );
+  }
+};
+
+// PUT route to update a grade by student + subject
+export const updateGrade = async ( req, res ) => {
+  const { student_id, subject_id, term_id, grade } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE grades
+       SET grade = $1
+       WHERE student_id = $2 AND subject_id = $3 AND term_id = $4
+       RETURNING *`,
+      [grade, student_id, subject_id, term_id]
+    );
+
+    res.json( { updated: result.rows[0] } );
+  } catch ( err ) {
+    console.error( err );
+    res.status( 500 ).send( "Failed to update grade" );
+  }
+};
+
+export const deleteGrade = async ( req, res ) => {
+  const { id } = req.body; // row id
+
+  try {
+    const result = await pool.query(
+      `DELETE FROM grades WHERE id = $1 RETURNING *`,
+      [id]
+    );
+
+    if ( result.rowCount === 0 ) {
+      return res.status( 404 ).json( { error: "No grade found with that id" } );
+    }
+
+    res.json( { deleted: result.rows[0] } );
+  } catch ( err ) {
+    console.error( err );
+    res.status( 500 ).json( { error: "Failed to delete grade" } );
+  }
+};
+

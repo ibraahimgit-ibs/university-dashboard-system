@@ -2,8 +2,6 @@ import { MdOutlineFileDownload, MdOutlineFileUpload } from "react-icons/md";
 import Selection from "./Selection";
 
 const GradeEntry_a = ({students}) => {
-
-  console.log(students);
   
 
   return (

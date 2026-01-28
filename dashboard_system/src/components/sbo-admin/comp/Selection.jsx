@@ -1,63 +1,63 @@
 import { useState } from "react";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { FiPlus } from "react-icons/fi";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { LuPen } from "react-icons/lu";
-import { FiPlus } from "react-icons/fi";
-import EditGradeWindow from "./EditGradeWindow";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { useRecoilState } from 'recoil';
+import { useStudent } from "../../../hooks/useStudent";
 import {
     gradeEntryClickedDataState,
-    gradeEntryClickedNowState,
-    gradeEntryDataState,
-    gradeEntryLettersState,
     gradeEntryWindowState,
     userDataState
-
 } from './../../../atom/atom';
-import { useRecoilState } from 'recoil';
+import AddGradeModal from "./AddGradeModal";
+import EditGradeWindow from "./EditGradeWindow";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import toast from "react-hot-toast";
+import axios from "axios";
+import DeleteModal from "./DeleteModal";
 
 
 const Selection = ( { students } ) => {
     const [selected, setSelected] = useState( null );
     const [open, setOpen] = useState( false );
     const [isOpen, setIsOpen] = useRecoilState( gradeEntryWindowState );
-    const [data, __] = useRecoilState( gradeEntryDataState );
-    const [_, setClickedData] = useRecoilState( gradeEntryClickedDataState );
-    const [____, setClickedNow] = useRecoilState( gradeEntryClickedNowState );
-    const [Letters, ________] = useRecoilState( gradeEntryLettersState );
-    const [studentData, _______] = useRecoilState( userDataState );
+    const [clickedData, setClickedData] = useRecoilState( gradeEntryClickedDataState );
+    const [studentData, setStudentData] = useRecoilState( userDataState );
+    const [delOpen, setDelOpen] = useState( false );
 
 
     const { grades } = studentData;
+    const { isOpened, setIsOpened } = useStudent();
 
     const handleClick = () => {
         setIsOpen( !isOpen )
     }
 
+
     const studentGrades = grades?.filter( grade => grade.student_id === selected?.id );
 
-    // function getLetterGrade( percentage ) {
-    //     if ( percentage >= 90 ) return "A";
-    //     else if ( percentage >= 80 ) return "B";
-    //     else if ( percentage >= 70 ) return "C";
-    //     else if ( percentage >= 60 ) return "D";
-    //     else if ( percentage >= 50 ) return "E";
-    //     else return "F";
-    // }
+    function getLetterGrade( percentage ) {
+        if ( percentage >= 90 ) return "A";
+        else if ( percentage >= 80 ) return "B";
+        else if ( percentage >= 70 ) return "C";
+        else if ( percentage >= 60 ) return "D";
+        else if ( percentage >= 50 ) return "E";
+        else return "F";
+    }
 
-    // let mathGrade = getLetterGrade( data.Mathematics );
-    // let englishGrade = getLetterGrade( data.English_Literature );
-    // let chemistryGrade = getLetterGrade( data.Chemistry );
-    // let historyGrade = getLetterGrade( data.History );
-    // let physicsGrade = getLetterGrade( data.physics );
+    function getRowColor( percentage ) {
+        if ( percentage >= 90 ) return "bg-green-600 text-white";   // A → Green
+        else if ( percentage >= 80 ) return "bg-blue-600 text-white"; // B → Blue
+        else if ( percentage >= 70 ) return "bg-gray-400 text-white"; // C → Yellow
+        else if ( percentage >= 60 ) return "bg-black text-white"; // D → Orange
+        else if ( percentage >= 50 ) return "bg-red-600 text-white"; // E → Purple
+        else return "bg-purple-600 text-white"; // F → Red
+    }
 
-    // function getRowColor( percentage ) {
-    //     if ( percentage >= 90 ) return "bg-green-600 text-white";   // A → Green
-    //     else if ( percentage >= 80 ) return "bg-blue-600 text-white"; // B → Blue
-    //     else if ( percentage >= 70 ) return "bg-gray-400 text-white"; // C → Yellow
-    //     else if ( percentage >= 60 ) return "bg-black text-white"; // D → Orange
-    //     else if ( percentage >= 50 ) return "bg-red-600 text-white"; // E → Purple
-    //     else return "bg-purple-600 text-white"; // F → Red
-    // }
+
+
+    // console.log(studentData);
 
 
     return (
@@ -117,7 +117,9 @@ const Selection = ( { students } ) => {
             {selected !== null && <div className="my-5">
                 <div className="flex items-center justify-between">
                     <h1 className="font-semibold">Current Grades</h1>
-                    <button className="bg-black text-white flex items-center gap-2 p-1 px-2 rounded-md font-semibold">
+                    <button
+                        onClick={() => setIsOpened( !isOpened )}
+                        className="bg-black text-white flex items-center gap-2 p-1 px-2 rounded-md font-semibold">
                         <FiPlus /> Add grade
                     </button>
                 </div>
@@ -134,163 +136,50 @@ const Selection = ( { students } ) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.isArray( studentGrades ) && studentGrades?.map( ( grade, i ) => (
-                                <tr key={i}>
-                                    <td>{grade?.subject}</td>
-                                    <td>{grade?.grade}%</td>
-                                    <td ><span className="a">A-</span></td>
-                                    <td>{grade?.term}</td>
-                                    <td>{grade?.enrolment_date}</td>
-                                    <td>
-                                        <div
-                                            onClick={() => {
-                                                handleClick();
-                                                setClickedNow( "" );
-                                                setClickedData( 0 );
-                                                setClickedNow( "b" );
-                                                setClickedData( data.English_Literature );
-                                            }}
-                                            className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
-                                            <LuPen className="h-5 w-4" />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) )}
+                            {Array.isArray( studentGrades ) && studentGrades?.map( ( grade, i ) => {
+                                const letter = getLetterGrade( grade?.grade );
+                                // console.log(clickedData !== null && clickedData[5]);
+
+                                return (
+                                    <tr key={i}>
+                                        <td>{grade?.subject}</td>
+                                        <td>{grade?.grade}%</td>
+                                        <td ><span className={`a ${ getRowColor( grade.grade ) }`}>{letter}</span></td>
+                                        <td>{grade?.term}</td>
+                                        <td>{grade?.enrolment_date}</td>
+                                        <td className="flex items-center">
+                                            <div
+                                                onClick={() => {
+                                                    handleClick();
+                                                    setClickedData( 0 );
+                                                    setClickedData( [grade?.student_id, grade?.subject_id, grade?.term_id, grade?.grade, grade?.subject, grade?.id] );
+                                                }}
+                                                className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
+                                                <LuPen className="h-5 w-4" />
+                                            </div>
+                                            <div
+                                                onClick={() => {
+                                                    setClickedData( 0 );
+                                                    setClickedData( [grade?.student_id, grade?.subject_id, grade?.term_id, grade?.grade, grade?.subject, grade?.id] );
+                                                    setDelOpen( !delOpen );
+                                                }}
+                                                className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
+                                                <RiDeleteBin5Line className="h-5 w-4" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            } )}
                         </tbody>
                     </table>
                 </div>
             </div>}
 
             <EditGradeWindow />
+            <AddGradeModal />
+            <DeleteModal delOpen={delOpen} setDelOpen={setDelOpen} setStudentData={setStudentData} clickedData={clickedData} />
         </div>
     );
 }
 
 export default Selection;
-
-
-
-
-
-
-
-
-
-
-
-{/* <div className="overflow-x-auto">
-    <table className="w-full mt-6 text-sm">
-        <thead>
-            <tr>
-                <th>Subject</th>
-                <th>Grade</th>
-                <th>Letter Grade</th>
-                <th>Credits</th>
-                <th>Semester</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td className="font-semibold">Mathematics</td>
-                <td>{data.Mathematics}%</td>
-                <td ><span className={`a ${ getRowColor( data.Mathematics ) }`}>{mathGrade}</span></td>
-                <td>4</td>
-                <td>Fall 2025</td>
-                <td>
-                    <div
-                        onClick={() => {
-                            handleClick();
-                            setClickedNow( "" );
-                            setClickedData( 0 );
-                            setClickedNow( "a" );
-                            setClickedData( data.Mathematics );
-                        }}
-                        className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
-                        <LuPen className="h-5 w-4" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td className="font-semibold">English Literature</td>
-                <td>{data.English_Literature}%</td>
-                <td ><span className={`a ${ getRowColor( data.English_Literature ) }`}>{englishGrade}</span></td>
-                <td>3</td>
-                <td>Fall 2025</td>
-                <td>
-                    <div
-                        onClick={() => {
-                            handleClick();
-                            setClickedNow( "" );
-                            setClickedData( 0 );
-                            setClickedNow( "b" );
-                            setClickedData( data.English_Literature );
-                        }}
-                        className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
-                        <LuPen className="h-5 w-4" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td className="font-semibold">Chemistry</td>
-                <td>{data.Chemistry}%</td>
-                <td ><span className={`a ${ getRowColor( data.Chemistry ) }`}>{chemistryGrade}</span></td>
-                <td>4</td>
-                <td>Fall 2025</td>
-                <td>
-                    <div
-                        onClick={() => {
-                            handleClick();
-                            setClickedNow( "" );
-                            setClickedData( 0 );
-                            setClickedNow( "c" );
-                            setClickedData( data.Chemistry );
-                        }}
-                        className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
-                        <LuPen className="h-5 w-4" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td className="font-semibold">History</td>
-                <td>{data.History}%</td>
-                <td ><span className={`a ${ getRowColor( data.History ) }`}>{historyGrade}</span></td>
-                <td>3</td>
-                <td>Fall 2025</td>
-                <td>
-                    <div
-                        onClick={() => {
-                            handleClick();
-                            setClickedNow( "" );
-                            setClickedData( 0 );
-                            setClickedNow( "d" );
-                            setClickedData( data.History );
-                        }}
-                        className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
-                        <LuPen className="h-5 w-4" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td className="font-semibold">physics</td>
-                <td>{data.physics}%</td>
-                <td ><span className={`a ${ getRowColor( data.physics ) }`}>{physicsGrade}</span></td>
-                <td>4</td>
-                <td>Fall 2025</td>
-                <td>
-                    <div
-                        onClick={() => {
-                            handleClick();
-                            setClickedNow( "" );
-                            setClickedData( 0 );
-                            setClickedNow( "e" );
-                            setClickedData( data.physics );
-                        }}
-                        className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
-                        <LuPen className="h-5 w-4" />
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div> */}

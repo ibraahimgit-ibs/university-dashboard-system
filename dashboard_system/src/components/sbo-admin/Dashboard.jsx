@@ -29,7 +29,7 @@ const Dashboard = () => {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7 pt-10 w-full">
         <Card title="Total Students" icon={<GoPeople />} numbers={students.students.length} paragraph={"2 with grades"} />
         <Card title="Average GPA" icon={<BsGraphUpArrow />} numbers={"3.62"} paragraph={"Current semester"} />
-        <Card title="Grades Entered" icon={<LuBookOpen />} numbers={"7"} paragraph={"This semester"} />
+        <Card title="Grades Entered" icon={<LuBookOpen />} numbers={students.grades.length} paragraph={"This semester"} />
       </div>
       <div className="sbo_dashboard_option bg-gray-200 p-0 my-6 w-full flex items-center justify-between rounded-full">
         <button
