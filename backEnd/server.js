@@ -5,7 +5,11 @@ import cors from "cors";
 
 const app = express();
 app.use( express.json() );
-app.use( cors( { origin: "https://university-dashboard-system.vercel.app/" } ) );
+app.use( cors( {
+  origin: "https://university-dashboard-system.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+} ) );
 
 app.use( '/api/student', studentRouter );
 
