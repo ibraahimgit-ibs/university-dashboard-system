@@ -11,6 +11,12 @@ app.use( cors( {
   credentials: true
 } ) );
 
+app.use( ( err, req, res, next ) => {
+  console.error( err.stack );
+  res.status( 500 ).json( { error: "Something went wrong", details: err.message } );
+} );
+
+
 app.use( '/api/student', studentRouter );
 
 app.listen( PORT, () => {
