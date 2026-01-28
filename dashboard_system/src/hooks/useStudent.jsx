@@ -49,7 +49,7 @@ export const StudentProvidor = ( { children } ) => {
     const handleUpdateGrade = async ( student_id, subject_id, term_id, newGrade ) => {
         try {
 
-            const res = await axios.put( "/api/student/update-grade", {
+            const res = await axios.put( "https://university-dashboard-system.onrender.com/api/student/update-grade", {
                 student_id: student_id,
                 subject_id: subject_id,
                 term_id: term_id,

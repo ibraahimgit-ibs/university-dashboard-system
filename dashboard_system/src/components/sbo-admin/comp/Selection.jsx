@@ -3,6 +3,7 @@ import { FiPlus } from "react-icons/fi";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { LuPen } from "react-icons/lu";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import { useRecoilState } from 'recoil';
 import { useStudent } from "../../../hooks/useStudent";
 import {
@@ -11,11 +12,8 @@ import {
     userDataState
 } from './../../../atom/atom';
 import AddGradeModal from "./AddGradeModal";
-import EditGradeWindow from "./EditGradeWindow";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import toast from "react-hot-toast";
-import axios from "axios";
 import DeleteModal from "./DeleteModal";
+import EditGradeWindow from "./EditGradeWindow";
 
 
 const Selection = ( { students } ) => {

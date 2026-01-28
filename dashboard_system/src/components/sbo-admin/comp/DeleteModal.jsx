@@ -20,7 +20,7 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
     // delete grade
         const handleDeleteGrade = async ( id ) => {
             try {
-                const res = await axios.delete( "/api/student/delete-grade", {
+                const res = await axios.delete( "https://university-dashboard-system.onrender.com/api/student/delete-grade", {
                     data: { id }
                 } );
     

@@ -27,7 +27,7 @@ const AddGradeModal = () => {
         e.preventDefault();
         setIsOpened( !isOpened );
         try {
-            const res = await axios.post( "/api/student/add-grades", formData );
+            const res = await axios.post( "https://university-dashboard-system.onrender.com/api/student/add-grades", formData );
             // console.log( "Grade added:", res.data );
             setFormData( { student_id: "", subject_id: "", term_id: "", grade: "" } );
 
