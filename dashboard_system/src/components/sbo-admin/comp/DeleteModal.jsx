@@ -24,7 +24,7 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
                     data: { id }
                 } );
     
-                console.log( res );
+                // console.log( res );
     
     
                 // ✅ Update UI

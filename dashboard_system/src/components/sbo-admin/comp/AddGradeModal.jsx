@@ -28,7 +28,7 @@ const AddGradeModal = () => {
         setIsOpened( !isOpened );
         try {
             const res = await axios.post( "/api/student/add-grades", formData );
-            console.log( "Grade added:", res.data );
+            // console.log( "Grade added:", res.data );
             setFormData( { student_id: "", subject_id: "", term_id: "", grade: "" } );
 
             // Backend waa inuu soo celiyo row cusub 
@@ -117,6 +117,7 @@ const AddGradeModal = () => {
                             Save Grade
                         </button>
                     </form>
+
                 </div>
             </Modal>
         </div>
