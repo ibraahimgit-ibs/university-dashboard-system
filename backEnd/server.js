@@ -19,6 +19,10 @@ app.use( ( err, req, res, next ) => {
 
 app.use( '/api/student', studentRouter );
 
+app.get("/", (req, res) => {
+  res.json("hello");
+});
+
 app.listen( PORT, () => {
   console.log( `Server is running on http://localhost:${ PORT }` );
 } );
