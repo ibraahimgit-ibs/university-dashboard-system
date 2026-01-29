@@ -16,8 +16,11 @@ const Dashboard = () => {
     c: false,
   }
 
-  const [selected, setSelected] = useState(btn_selected);
-  const [students, __] = useRecoilState(userDataState);
+  const [selected, setSelected] = useState( btn_selected );
+  const [students, __] = useRecoilState( userDataState );
+
+  console.log( students );
+
 
 
   return (
@@ -27,27 +30,27 @@ const Dashboard = () => {
         <p className="text-gray-500">Manage grades, view student performance, and generate academic reports.</p>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7 pt-10 w-full">
-        <Card title="Total Students" icon={<GoPeople />} numbers={students.students.length} paragraph={"2 with grades"} />
+        <Card title="Total Students" icon={<GoPeople />} numbers={students.students !== undefined && students.students.length} paragraph={"2 with grades"} />
         <Card title="Average GPA" icon={<BsGraphUpArrow />} numbers={"3.62"} paragraph={"Current semester"} />
-        <Card title="Grades Entered" icon={<LuBookOpen />} numbers={students.grades.length} paragraph={"This semester"} />
+        <Card title="Grades Entered" icon={<LuBookOpen />} numbers={students.grades !== undefined && students.grades.length} paragraph={"This semester"} />
       </div>
       <div className="sbo_dashboard_option bg-gray-200 p-0 my-6 w-full flex items-center justify-between rounded-full">
         <button
-          className={`sbo_btn ${selected.a && "selected_sbo_btn bg-white"}`}
-          onClick={() => setSelected({ ...selected, a: true, b: false, c: false })}
+          className={`sbo_btn ${ selected.a && "selected_sbo_btn bg-white" }`}
+          onClick={() => setSelected( { ...selected, a: true, b: false, c: false } )}
         >Grade Entry</button>
         <button
-          className={`sbo_btn ${selected.b && "selected_sbo_btn bg-white"}`}
-          onClick={() => setSelected({ ...selected, a: false, b: true, c: false })}
+          className={`sbo_btn ${ selected.b && "selected_sbo_btn bg-white" }`}
+          onClick={() => setSelected( { ...selected, a: false, b: true, c: false } )}
         >Students</button>
         <button
-          className={`sbo_btn ${selected.c && "selected_sbo_btn bg-white"}`}
-          onClick={() => setSelected({ ...selected, a: false, b: false, c: true })}
+          className={`sbo_btn ${ selected.c && "selected_sbo_btn bg-white" }`}
+          onClick={() => setSelected( { ...selected, a: false, b: false, c: true } )}
         >Reports</button>
       </div>
       <div>
-        {selected.a && <GradeEntry_a students={students.students} />}
-        {selected.b && <Students_b students={students.students} grade={students.grades}/>}
+        {selected.a && <GradeEntry_a students={students.students !== undefined && students.students} />}
+        {selected.b && <Students_b students={students.students !== undefined && students.students} grade={students.students !== undefined && students.grades} />}
         {selected.c && <Reports_c />}
       </div>
     </div>

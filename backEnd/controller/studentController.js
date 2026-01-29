@@ -13,6 +13,13 @@ app.use( cookieParser() )
 // get data of students and subects from db
 export const studentData = async ( req, res ) => {
   try {
+    res.set( {
+      "Cache-Control": "no-store, no-cache, must-revalidate, private",
+      "Pragma": "no-cache",
+      "Expires": "0",
+    } );
+
+
     const studentsResult = await pool.query( 'SELECT * FROM students' );
     const subjectsResult = await pool.query( 'SELECT * FROM subjects' );
     const GradesResult = await pool.query( 'SELECT s.f_name, sub.sub_name AS subject, t.term_name AS term, g.id, g.grade, g.enrolment_date, g.student_id, g.subject_id, g.term_id FROM grades g JOIN students s ON g.student_id = s.id JOIN subjects sub ON g.subject_id = sub.id JOIN terms t ON g.term_id = t.id;' );
