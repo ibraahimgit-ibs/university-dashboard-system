@@ -40,7 +40,7 @@ const Login = () => {
     setLoading( true );
 
     try {
-      const { data } = await axios.post( "https://university-dashboard-system.onrender.com/api/student/login-student", formData );
+      const { data } = await axios.post( "https://university-dashboard-system.onrender.com/api/student/login-student", formData, { withCredentials: true } );
       toast.success( "successfully login" )
       setLoading( false )
       login( data, data.expiresIn )
