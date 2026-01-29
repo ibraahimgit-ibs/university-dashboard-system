@@ -39,6 +39,7 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
                 toast.error( "Failed to delete grade" );
             }
         };
+        
 
     return (
         <div>
@@ -50,7 +51,7 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
             >
                 <div style={style} className='rounded-md bg-white p-2 flex flex-col'>
                     <h1 className='flex items-center justify-center text-gray-600'>Are you sure you want to delete </h1>
-                    <p className='flex items-center justify-center font-bold'>({clickedData[4]} : {clickedData[3]}%)</p>
+                    <p className='flex items-center justify-center font-bold'>({clickedData && clickedData[4]} : {clickedData && clickedData[3]}%)</p>
                     <div className="flex items-center justify-between mt-5">
                         <button
                             className="btn1 w-18.5 h-9 border border-gray-300 rounded-md hover:bg-gray-100 transition"

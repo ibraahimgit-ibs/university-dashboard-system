@@ -19,6 +19,8 @@ function App() {
 
   const { student } = useStudent();
   
+  // console.log(SD);
+  
 
   useEffect( () => {
     async function fetchData() {

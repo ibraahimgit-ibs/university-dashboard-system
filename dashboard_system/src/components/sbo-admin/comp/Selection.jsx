@@ -55,7 +55,7 @@ const Selection = ( { students } ) => {
 
 
 
-    // console.log(studentData);
+    // console.log("student data",studentData);
 
 
     return (
