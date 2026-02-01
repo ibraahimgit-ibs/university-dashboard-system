@@ -5,9 +5,12 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRecoilState } from 'recoil';
 import { userDataState } from '../../../atom/atom';
+import axiosUrl from '../../../hooks/axiosUrl';
 
 const AddGradeModal = () => {
     const [___, setStudentData] = useRecoilState( userDataState );
+
+    const { axiosDeffaultUrl } = axiosUrl();
 
     const [formData, setFormData] = useState( {
         student_id: "",
@@ -27,7 +30,7 @@ const AddGradeModal = () => {
         e.preventDefault();
         setIsOpened( !isOpened );
         try {
-            const res = await axios.post( "https://university-dashboard-system.onrender.com/api/student/add-grades", formData );
+            const res = await axios.post( `${ axiosDeffaultUrl }/api/student/add-grades`, formData );
             // console.log( "Grade added:", res.data );
             setFormData( { student_id: "", subject_id: "", term_id: "", grade: "" } );
 

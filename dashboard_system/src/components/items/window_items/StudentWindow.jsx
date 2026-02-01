@@ -1,38 +1,20 @@
-import { useEffect, useState } from "react";
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { FaGraduationCap } from "react-icons/fa6";
 import { MdPayment } from "react-icons/md";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 
 
 const StudentWindow = () => {
-  const INPAGE = {
-    indashboard: false,
-    ingrades: false,
-    inpayment: false,
-    inprofile: false,
-  }
-
-  const [inPage, setInPage] = useState(INPAGE);
   const location = useLocation();
-  // const [shoWmenu] = useRecoilState(showMenu);
+
+  const inPage = {
+    indashboard: location.pathname === "/student/dashboard",
+    ingrades: location.pathname === "/student/grades",
+    inpayment: location.pathname === "/student/payments",
+    inprofile: location.pathname === "/student/profile",
+  };
 
 
-  useEffect(() => {
-    const newPage = { ...INPAGE };
-
-    if (location.pathname === "/student/dashboard") {
-      newPage.indashboard = true;
-    } else if (location.pathname === "/student/grades") {
-      newPage.ingrades = true;
-    } else if (location.pathname === "/student/payments") {
-      newPage.inpayment = true;
-    } else if (location.pathname === "/student/profile") {
-      newPage.inprofile = true;
-    }
-
-    setInPage(newPage);
-  }, [location]);
 
 
 

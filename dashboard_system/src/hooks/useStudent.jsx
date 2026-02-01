@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { roleMethodState, userDataState } from "../atom/atom";
-
-const StudentContext = createContext( null );
+import StudentContext from "./studentContext";
 
 export const StudentProvidor = ( { children } ) => {
 
@@ -16,11 +15,18 @@ export const StudentProvidor = ( { children } ) => {
 
 
     const logout = () => {
-        localStorage.removeItem( "student" );
-        localStorage.removeItem( "expirationTime" );
-        setStudent( null );
-        navigate( "/" );
-        setRoleMethod( prev => ( { ...prev, student: false } ) );
+
+        try {
+            axios.post( "/api/logout", { Credential: true } )
+            localStorage.removeItem( "student" );
+            localStorage.removeItem( "expirationTime" );
+            setStudent( null );
+            navigate( "/" );
+            setRoleMethod( prev => ( { ...prev, student: false } ) );
+        } catch ( err ) {
+            console.log( "error for logout", err )
+        }
+
     }
 
     useEffect( () => {
@@ -86,7 +92,4 @@ export const StudentProvidor = ( { children } ) => {
 
 };
 
-export const useStudent = () => useContext( StudentContext );
-
-
-export default StudentContext;
+export default StudentProvidor;

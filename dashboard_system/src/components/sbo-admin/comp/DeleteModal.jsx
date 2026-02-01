@@ -1,9 +1,12 @@
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import axiosUrl from '../../../hooks/axiosUrl';
 
 const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => {
-        const handleClose = () => setDelOpen( false );
+    const handleClose = () => setDelOpen( false );
+
+    const { axiosDeffaultUrl } = axiosUrl();
 
     const style = {
         position: 'absolute',
@@ -18,28 +21,26 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
     };
 
     // delete grade
-        const handleDeleteGrade = async ( id ) => {
-            try {
-                const res = await axios.delete( "https://university-dashboard-system.onrender.com/api/student/delete-grade", {
-                    data: { id }
-                } );
-    
-                // console.log( res );
-    
-    
-                // ✅ Update UI
-                setStudentData( prev => ( {
-                    ...prev,
-                    grades: prev.grades.filter( g => g.id !== id )
-                } ) );
-    
-                toast.success( "Grade deleted successfully" );
-            } catch ( err ) {
-                console.error( "Error deleting grade:", err );
-                toast.error( "Failed to delete grade" );
-            }
-        };
-        
+    const handleDeleteGrade = async ( id ) => {
+        try {
+            await axios.delete( `${axiosDeffaultUrl}/api/student/delete-grade`, {
+                data: { id }
+            } );
+
+
+            // ✅ Update UI
+            setStudentData( prev => ( {
+                ...prev,
+                grades: prev.grades.filter( g => g.id !== id )
+            } ) );
+
+            toast.success( "Grade deleted successfully" );
+        } catch ( err ) {
+            console.error( "Error deleting grade:", err );
+            toast.error( "Failed to delete grade" );
+        }
+    };
+
 
     return (
         <div>
@@ -55,14 +56,14 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
                     <div className="flex items-center justify-between mt-5">
                         <button
                             className="btn1 w-18.5 h-9 border border-gray-300 rounded-md hover:bg-gray-100 transition"
-                            onClick={() => setDelOpen(!delOpen)}
+                            onClick={() => setDelOpen( !delOpen )}
                         >Cancel
                         </button>
                         <button
                             className="btn2 w-36 h-9 px-2 border bg-black text-white border-gray-300 rounded-md hover:bg-[#000000de] transition"
                             onClick={() => {
                                 setDelOpen( !delOpen )
-                                handleDeleteGrade( clickedData !== null && clickedData[5] );
+                                handleDeleteGrade( clickedData?.[5] );
                             }}
                         >Delete</button>
                     </div>

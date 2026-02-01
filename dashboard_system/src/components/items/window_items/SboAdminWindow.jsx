@@ -1,36 +1,18 @@
-import { useEffect, useState } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { GoPeople } from "react-icons/go";
 import { LuBookOpen } from "react-icons/lu";
 import { TbReport } from "react-icons/tb";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 
 const SboAdminWindow = () => {
-    const INPAGE = {
-        indashboard: false,
-        ingrades: false,
-        inpayment: false,
-        inprofile: false,
-    }
-
-    const [inPage, setInPage] = useState(INPAGE);
     const location = useLocation();
 
-    useEffect(() => {
-        const newPage = { ...INPAGE };
-
-        if (location.pathname === "/sbo-admin/dashboard") {
-            newPage.indashboard = true;
-        } else if (location.pathname === "/sbo-admin/GradeEntry") {
-            newPage.ingrades = true;
-        } else if (location.pathname === "/sbo-admin/Students") {
-            newPage.inpayment = true;
-        } else if (location.pathname === "/sbo-admin/Reports") {
-            newPage.inprofile = true;
-        }
-
-        setInPage(newPage);
-    }, [location]);
+    const inPage = {
+        indashboard: location.pathname === "/sbo-admin/dashboard",
+        ingrades: location.pathname === "/sbo-admin/GradeEntry",
+        inpayment: location.pathname === "/sbo-admin/Students",
+        inprofile: location.pathname === "/sbo-admin/Reports",
+    };
 
 
     return (

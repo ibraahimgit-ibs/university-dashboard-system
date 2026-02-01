@@ -30,7 +30,7 @@ const Profile = () => {
                     </div>
                     <div className="text-sm grid gap-2 mb-5">
                         <h1 className="font-semibold">Gender</h1>
-                        <p className="text-gray-500">{student.gender === "M" ? "Male" : "Female"}</p>
+                        <p className="text-gray-500">{student?.gender}</p>
                     </div>
                     <div className="grid gap-5">
                         <label className="font-semibold text-sm">Major</label>

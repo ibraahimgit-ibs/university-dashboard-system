@@ -1,10 +1,11 @@
 import { Route, Routes } from 'react-router';
 import Dashboard from '../components/student/dashboard/Dashboard';
+import Payments from "../components/student/payments/Payments";
 import Grades from './../components/student/grades/Grades';
-import Payments from "../components/student/payments/Payments"
 import Profile from './../components/student/profile/Profile';
 
 const Student = () => {
+
 
   return (
     <div className='mx-auto max-w-7xl'>

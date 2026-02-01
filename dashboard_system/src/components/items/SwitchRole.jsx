@@ -3,7 +3,6 @@ import { AiOutlineDown } from "react-icons/ai";
 import { Navigate, useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
 import { roleMethodState } from "../../atom/atom";
-import { useStudent } from "../../hooks/useStudent";
 
 const SwitchRole = () => {
 
@@ -11,7 +10,6 @@ const SwitchRole = () => {
     const [roleMethod, setRoleMethod] = useRecoilState( roleMethodState );
 
     const navigate = useNavigate();
-    const { student } = useStudent();
 
     const handleShow = () => {
         setShow( !show )
