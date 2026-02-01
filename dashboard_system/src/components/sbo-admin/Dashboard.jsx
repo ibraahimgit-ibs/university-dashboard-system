@@ -19,9 +19,6 @@ const Dashboard = () => {
   const [selected, setSelected] = useState( btn_selected );
   const [students, __] = useRecoilState( userDataState );
 
-  console.log( students );
-
-
 
   return (
     <div className="min-w-full max-w-full">

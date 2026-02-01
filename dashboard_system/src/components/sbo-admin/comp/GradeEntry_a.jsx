@@ -3,6 +3,8 @@ import Selection from "./Selection";
 
 const GradeEntry_a = ({students}) => {
   
+  console.log(students);
+  
 
   return (
     <div className="border border-gray-300 rounded-xl h-full w-full p-3 md:px-6 sm:px-3 flex flex-col gap-5">
