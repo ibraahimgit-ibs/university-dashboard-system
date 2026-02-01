@@ -74,6 +74,7 @@ export const loginStudent = async ( req, res ) => {
       // secure: false,
       secure: true,
       sameSite: 'none',
+      path: '/',
       maxAge: expiresIn * 1000,
     } );
 
