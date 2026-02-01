@@ -11,7 +11,7 @@ import { useStudent } from "./hooks/useStudent"
 import Login from "./pages/Login"
 import PagesMain from "./PagesMain"
 import useAuth from "./hooks/useAuth"
-import axiosUrl from './hooks/axiosUrl';
+// import axiosUrl from './hooks/axiosUrl';
 
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
   const [show, setShow] = useState( false );
 
   const { student } = useStudent();
-  const { axiosDeffaultUrl } = axiosUrl();
+  // const { axiosDeffaultUrl } = axiosUrl();
 
   // console.log(SD);
 
@@ -28,7 +28,7 @@ function App() {
   useEffect( () => {
     async function fetchData() {
       try {
-        const respons = await axios.get( `${axiosDeffaultUrl}/api/student/student-data` );
+        const respons = await axios.get( `https://university-dashboard-system.onrender.com/api/student/student-data` );
         setStudentData( respons.data );
       } catch ( err ) {
         console.error( err );
