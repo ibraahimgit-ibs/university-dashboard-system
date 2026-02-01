@@ -28,8 +28,8 @@ function App() {
   useEffect( () => {
     async function fetchData() {
       try {
-        const respons = await axios.get( `https://university-dashboard-system.onrender.com/api/student/student-data`, {withCredentials: true,} );
-        setStudentData( respons.data ); { withCredentials: true,}
+        const respons = await axios.get( `https://university-dashboard-system.onrender.com/api/student/student-data`, {withCredentials: true} );
+        setStudentData( respons.data );
       } catch ( err ) {
         console.error( err );
       }
