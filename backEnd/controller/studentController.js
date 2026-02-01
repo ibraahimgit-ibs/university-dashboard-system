@@ -73,6 +73,7 @@ export const loginStudent = async ( req, res ) => {
       httpOnly: true,
       // secure: false,
       secure: true,
+      sameSite: 'none',
       maxAge: expiresIn * 1000,
     } );
 

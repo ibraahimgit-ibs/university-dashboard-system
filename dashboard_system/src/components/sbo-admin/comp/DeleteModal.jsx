@@ -23,7 +23,7 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
     // delete grade
     const handleDeleteGrade = async ( id ) => {
         try {
-            await axios.delete( `${axiosDeffaultUrl}/api/student/delete-grade`, {
+            await axios.delete( `${ axiosDeffaultUrl }/api/student/delete-grade`, { withCredentials: true, }, {
                 data: { id }
             } );
 

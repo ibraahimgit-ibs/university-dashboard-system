@@ -25,9 +25,8 @@ app.use( '/api/student', studentRouter );
 
 // **********auth**********//
 app.get( "/api/check-auth", authenticate, ( req, res ) => {
-
+  res.set( 'Cache-Control', 'no-store' );
   res.json( { loggedIn: true, student: req.student } );
-
 } );
 // -------------------------
 

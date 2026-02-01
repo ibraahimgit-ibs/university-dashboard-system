@@ -60,7 +60,7 @@ export const StudentProvidor = ( { children } ) => {
                 subject_id: subject_id,
                 term_id: term_id,
                 grade: newGrade
-            } )
+            }, { withCredentials: true, } )
 
             const updated = res.data.updated;
 
