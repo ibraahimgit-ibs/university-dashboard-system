@@ -72,9 +72,9 @@ export const loginStudent = async ( req, res ) => {
 
     res.cookie( 'token', token, {
       httpOnly: true,
-      secure: false,
-      // secure: true,
-      // sameSite: 'none',
+      // secure: false,
+      secure: true,
+      sameSite: 'none',
       path: '/',
       maxAge: expiresIn * 1000,
     } );
