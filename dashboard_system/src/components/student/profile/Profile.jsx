@@ -1,9 +1,7 @@
-// import { useRecoilState } from "recoil";
-// import { matchedStudentState } from "../../../atom/atom";
-
 import { useStudent } from "../../../hooks/useStudent";
 
 const Profile = () => {
+
     const { student } = useStudent();
 
 

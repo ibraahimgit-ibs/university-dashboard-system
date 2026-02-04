@@ -1,9 +1,10 @@
 import { MdOutlineFileDownload, MdOutlineFileUpload } from "react-icons/md";
 import Selection from "./Selection";
+import { userDataState } from "../../../atom/atom";
+import { useRecoilState } from "recoil";
 
-const GradeEntry_a = ({students}) => {
-  
-  console.log(students);
+const GradeEntry_a = () => {
+  const [userData, __] = useRecoilState( userDataState );  
   
 
   return (
@@ -19,7 +20,7 @@ const GradeEntry_a = ({students}) => {
         </div>
       </div>
       <div>
-        <Selection students={students} />
+        <Selection students={userData.students} />
       </div>
     </div>
   )

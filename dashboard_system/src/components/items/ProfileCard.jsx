@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { BsPerson } from "react-icons/bs";
+import { Link } from 'react-router';
 import { useRecoilState } from "recoil";
 import { roleMethodState } from "../../atom/atom";
-import { Link } from 'react-router';
 import { useStudent } from "../../hooks/useStudent";
 
 const ProfileCard = () => {
@@ -13,7 +13,8 @@ const ProfileCard = () => {
     const [show, setShow] = useState( false );
     const [roleMethod, __] = useRecoilState( roleMethodState );
 
-    const { student, logout } = useStudent();
+    const { UserData, student, logout } = useStudent();
+
 
     const text = student?.f_name ? getFirstTwoLetters( student.f_name ) : '';
 
@@ -41,7 +42,7 @@ const ProfileCard = () => {
                 onClick={handleShow}
             >{nickName}</button>
 
-            {show &&
+            {show && UserData?.role === "student" &&
                 <div className="absolute right-5 text-sm rounded-xl w-60 p-0 py-1 m-2 shadow-lg bg-white shadow-gray-300 border border-gray-200 transition">
                     <div className="w-full pb-3 px-3">
                         <h1 className="font-semibold text-md">ID: {student?.id}</h1>
@@ -66,7 +67,7 @@ const ProfileCard = () => {
                     </div>
                     <div className="p-3 pt-0">
                         <button
-                            className="text-left p-2 w-full rounded-lg hover:bg-gray-200 transition"
+                            className="text-left p-2 w-full rounded-lg hover:bg-gray-200 hover:underline transition"
                             onClick={logout}
                         >
                             Log out
@@ -74,6 +75,14 @@ const ProfileCard = () => {
                     </div>
                 </div>
             }
+
+            {show && UserData?.role !== "student" && 
+            <div className="absolute right-5 text-sm rounded-xl w-60 py-3 px-2 mt-2 shadow-lg bg-white shadow-gray-300 border border-gray-200 transition">
+                <button
+                    className="text-left p-2 w-full rounded-lg hover:bg-gray-200 hover:underline transition"
+                    onClick={logout}
+                >LogOut</button>
+            </div>}
         </div>
     )
 }

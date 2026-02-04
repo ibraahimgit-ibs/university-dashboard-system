@@ -4,11 +4,13 @@ import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useRecoilState } from 'recoil';
-import { userDataState } from '../../../atom/atom';
+import { LoadingState, userDataState } from '../../../atom/atom';
 import axiosUrl from '../../../hooks/axiosUrl';
 
 const AddGradeModal = () => {
     const [___, setStudentData] = useRecoilState( userDataState );
+    const [__, setLoading] = useRecoilState( LoadingState )
+
 
     const { axiosDeffaultUrl } = axiosUrl();
 
@@ -29,20 +31,24 @@ const AddGradeModal = () => {
     const handleSubmit = async ( e ) => {
         e.preventDefault();
         setIsOpened( !isOpened );
+        setLoading( true )
+
         try {
-            const res = await axios.post( `${ axiosDeffaultUrl }/api/student/add-grades`, formData, { withCredentials: true, } );
+            // ${ axiosDeffaultUrl }
+            await axios.post( `${ axiosDeffaultUrl}/api/user/add-grades`, formData, { withCredentials: true, } );
             // console.log( "Grade added:", res.data );
             setFormData( { student_id: "", subject_id: "", term_id: "", grade: "" } );
 
-            // Backend waa inuu soo celiyo row cusub 
-            const newGrade = res.data.updated;
-
-            setStudentData( prev => ( { ...prev, grades: [...prev.grades, newGrade] } ) );
+            // Refresh full data so subject/term names are hydrated
+            const refreshed = await axios.get( `${ axiosDeffaultUrl}/api/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
+            setStudentData( refreshed.data );
 
             toast.success( "Successfully Added Grade" )
 
         } catch ( err ) {
             console.error( "Error adding grade:", err );
+        } finally {
+            setLoading( false )
         }
     };
 

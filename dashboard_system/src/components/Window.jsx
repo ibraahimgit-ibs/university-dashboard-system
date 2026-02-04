@@ -6,13 +6,13 @@ import { useStudent } from "../hooks/useStudent";
 
 const Window = () => {
   const [roleMethod] = useRecoilState( roleMethodState );
-  const { student } = useStudent();
+  const { UserData } = useStudent();  
 
   return (
     <div className="h-full w-full border-r border-r-gray-300 hidden md:block">
       <div>
-        {roleMethod.student && student  && <StudentWindow />}
-        {roleMethod.sbo_admin && student && <SboAdminWindow />}
+        {roleMethod.student && UserData?.role === "student" && <StudentWindow />}
+        {roleMethod.sbo_admin && <SboAdminWindow />}
       </div>
       <hr className="text-gray-300" />
     </div>

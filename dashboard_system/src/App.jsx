@@ -1,34 +1,34 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Toaster } from 'react-hot-toast'
-import { Route, Routes } from "react-router"
 import { useRecoilState } from "recoil"
-import { roleMethodState, userDataState } from "./atom/atom"
+import { LoadingState, userDataState } from "./atom/atom"
 import Header from "./components/Header"
 import SideBar from "./components/SideBar"
 import Window from "./components/Window"
-import { useStudent } from "./hooks/useStudent"
-import Login from "./pages/Login"
-import PagesMain from "./PagesMain"
 import useAuth from "./hooks/useAuth"
-// import axiosUrl from './hooks/axiosUrl';
+import PagesMain from "./PagesMain"
+import { useNavigate } from "react-router-dom"
+import CircularUnderLoad from "./components/items/CircularProgress"
+import axiosUrl from './hooks/axiosUrl';
 
 
 function App() {
   const [SD, setStudentData] = useRecoilState( userDataState );
-  const [roleMethod, __] = useRecoilState( roleMethodState );
+  const [loadingCircle, ____] = useRecoilState( LoadingState )
   const [show, setShow] = useState( false );
 
-  const { student } = useStudent();
-  // const { axiosDeffaultUrl } = axiosUrl();
+  const { axiosDeffaultUrl } = axiosUrl();
+  const navigate = useNavigate();
 
   // console.log(SD);
 
 
   useEffect( () => {
     async function fetchData() {
+      // ${axiosDeffaultUrl}
       try {
-        const respons = await axios.get( `https://university-dashboard-system.onrender.com/api/student/student-data`, {withCredentials: true} );
+        const respons = await axios.get( `${ axiosDeffaultUrl}/api/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
         setStudentData( respons.data );
       } catch ( err ) {
         console.error( err );
@@ -38,17 +38,20 @@ function App() {
     fetchData();
   }, [setStudentData] );
 
+
+  const { loading, logged } = useAuth();
+
   useEffect( () => {
-    if ( roleMethod.student || roleMethod.sbo_admin || roleMethod.registrar_admin || roleMethod.super_admin ) {
+    if ( logged ) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShow( true );
       return
     }
     return setShow( false );
-  }, [roleMethod.registrar_admin, roleMethod.sbo_admin, roleMethod.student, roleMethod.super_admin] );
+  }, [logged, navigate] );
 
 
-  const { loading } = useAuth();
+
 
 
   if ( loading ) {
@@ -59,11 +62,12 @@ function App() {
     <div className="relative w-full h-full">
       <Header />
       <main className="grid md:grid-cols-[1fr_5fr] lg:grid-cols-[1fr_5fr] w-full h-full">
-        {show && student && <Window />}
+        {show && <Window />}
         <PagesMain />
-        <SideBar />
+        {show && <SideBar />}
       </main>
       <Toaster />
+      {loadingCircle  && <CircularUnderLoad />}
     </div>
   );
 };

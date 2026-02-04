@@ -2,26 +2,23 @@ import { BsGraphUpArrow } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa6";
 import { MdPayment } from "react-icons/md";
 import { useRecoilState } from "recoil";
-import { modalData, Open, userDataState } from "../../../atom/atom";
-import { useStudent } from "../../../hooks/useStudent";
+import { modalData, Open } from "../../../atom/atom";
+import useStudent from "../../../hooks/useStudent";
 import Card from './../../items/Card';
 import PayModal from "./PayModal";
 
 const Dashboard = () => {
     const [isOpen, setIsOpen] = useRecoilState( Open )
     const [data, setData] = useRecoilState( modalData );
-    const [studentData, __] = useRecoilState( userDataState )
 
-    const { student } = useStudent();
-    const { grades } = studentData;
+
+    const { studentGrades, student } = useStudent();
+
 
     const handleSend = () => {
         setData( [...data, "$150.00", "9/1/2024"] );
         setIsOpen( !isOpen );
     }
-
-
-    const studentGrades = grades?.filter( grade => grade.student_id === student.id );
 
     function getLetterGrade( percentage ) {
         if ( percentage >= 90 ) return "A";

@@ -24,14 +24,12 @@ const Selection = ( { students } ) => {
     const [studentData, setStudentData] = useRecoilState( userDataState );
     const [delOpen, setDelOpen] = useState( false );
 
-
     const { grades } = studentData;
     const { isOpened, setIsOpened } = useStudent();
 
     const handleClick = () => {
         setIsOpen( !isOpen )
-    }
-
+    }    
 
     const studentGrades = grades?.filter( grade => grade.student_id === selected?.id );
 
@@ -55,7 +53,6 @@ const Selection = ( { students } ) => {
 
 
 
-    // console.log("student data",studentData);
 
 
     return (

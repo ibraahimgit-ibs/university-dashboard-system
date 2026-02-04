@@ -15,7 +15,6 @@ const EditGradeWindow = () => {
     const [clickedData, __] = useRecoilState( gradeEntryClickedDataState );
     const [Letters, setLetters] = useRecoilState( gradeEntryLettersState );
     const [newgrade, setNewgrade] = useState( "" );
-    // const [newTerm, setNewTerm] = useState( "" );
 
     const { handleUpdateGrade } = useStudent();
 
@@ -46,7 +45,6 @@ const EditGradeWindow = () => {
         setIsOpen( !isOpen );
     }
 
-    // console.log( "first", clickedData !== null && clickedData[0], clickedData !== null && clickedData[1], clickedData !== null && clickedData[2]);
 
     return (
         <div>

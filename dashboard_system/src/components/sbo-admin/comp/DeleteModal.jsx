@@ -1,9 +1,12 @@
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import axiosUrl from '../../../hooks/axiosUrl';
+import { useRecoilState } from 'recoil';
+import { LoadingState } from '../../../atom/atom';
+import axiosUrl from './../../../hooks/axiosUrl';
 
 const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => {
+    const [__, setLoading] = useRecoilState( LoadingState )
     const handleClose = () => setDelOpen( false );
 
     const { axiosDeffaultUrl } = axiosUrl();
@@ -22,8 +25,17 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
 
     // delete grade
     const handleDeleteGrade = async ( id ) => {
+        if ( !id ) {
+            toast.error( "Missing grade id" );
+            return;
+        }
+        setDelOpen( false );
+        setLoading( true )
+
         try {
-            await axios.delete( `${ axiosDeffaultUrl }/api/student/delete-grade`, { withCredentials: true, }, {
+            // ${ axiosDeffaultUrl }
+            await axios.delete( `${ axiosDeffaultUrl}/api/user/delete-grade`, {
+                withCredentials: true,
                 data: { id }
             } );
 
@@ -38,8 +50,11 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
         } catch ( err ) {
             console.error( "Error deleting grade:", err );
             toast.error( "Failed to delete grade" );
+        } finally {
+            setLoading( false );
         }
     };
+
 
 
     return (
@@ -61,10 +76,7 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
                         </button>
                         <button
                             className="btn2 w-36 h-9 px-2 border bg-black text-white border-gray-300 rounded-md hover:bg-[#000000de] transition"
-                            onClick={() => {
-                                setDelOpen( !delOpen )
-                                handleDeleteGrade( clickedData?.[5] );
-                            }}
+                            onClick={() => handleDeleteGrade( clickedData?.[5] )}
                         >Delete</button>
                     </div>
                 </div>

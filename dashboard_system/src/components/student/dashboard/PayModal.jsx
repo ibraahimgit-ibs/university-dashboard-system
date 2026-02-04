@@ -1,15 +1,20 @@
 import { useRecoilState } from "recoil";
 import { modalData, Open } from "../../../atom/atom";
 import { RxCrossCircled } from "react-icons/rx";
+import { toast } from 'react-hot-toast';
 
 
 const PayModal = () => {
-    const [isOpen, setIsOpen] = useRecoilState(Open)
-    const [data, setData] = useRecoilState(modalData);
+    const [isOpen, setIsOpen] = useRecoilState( Open )
+    const [data, setData] = useRecoilState( modalData );
 
     const handleClick = () => {
-        setIsOpen(!isOpen)
-        setData("")
+        setIsOpen( !isOpen )
+        setData( "" );
+    }
+
+    const meassage = () => {
+        return toast.success( "Successfully Paid" );
     }
 
     return (
@@ -45,7 +50,10 @@ const PayModal = () => {
                                 onClick={handleClick}
                             >Cancel
                             </button>
-                            <button className="btn2 w-36 h-9 px-2 border bg-black text-white border-gray-300 rounded-md hover:bg-[#000000de] transition">Process Payment</button>
+                            <button
+                                className="btn2 w-36 h-9 px-2 border bg-black text-white border-gray-300 rounded-md hover:bg-[#000000de] transition"
+                                onClick={meassage}
+                            >Process Payment</button>
                         </div>
                     </div>
                 </div>

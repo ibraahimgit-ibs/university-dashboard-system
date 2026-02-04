@@ -52,3 +52,16 @@ export const gradeEntryLettersState = atom( {
   key: 'gradeEntryLettersState',
   default: "",
 } )
+
+export const AdminSelectedState = atom( {
+  key: 'AdminSelectedState',
+  default: {
+    student: false,
+    teacher: true
+  }
+} )
+
+export const LoadingState = atom( {
+  key: 'LoadingState',
+  default: false
+} )

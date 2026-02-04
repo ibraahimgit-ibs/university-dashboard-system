@@ -1,7 +1,11 @@
+import { useRecoilState } from "recoil";
+import { userDataState } from "../../../atom/atom";
 
 
-const Students_b = ({ students }) => {
+const Students_b = () => {
+  const [userData, __] = useRecoilState( userDataState );
 
+  const { students } = userData;
 
   return (
     <div>
@@ -23,22 +27,20 @@ const Students_b = ({ students }) => {
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              {Array.isArray(students) && students.map((st, i) => (
-                <>
-                  <tr key={i}>
-                    <td className="font-semibold">{st?.id}</td>
-                    <td>{st?.f_name}</td>
-                    <td>3</td>
-                    <td >3.35</td>
-                    <td><span className="paid rounded-md font-semibold text-[12px]">Active</span></td>
-                    <td>
-                      <button className="font-semibold p-1 px-2 rounded-md hover:bg-gray-200 transition duration-300">View Profile</button>
-                    </td>
-                  </tr>
-                </>
-              ))}
-            </tbody>
+            {Array.isArray( students ) && students?.map( ( st, i ) => (
+              <tbody key={i}>
+                <tr>
+                  <td className="font-semibold">{st?.id}</td>
+                  <td>{st?.f_name}</td>
+                  <td>3</td>
+                  <td >3.35</td>
+                  <td><span className="paid rounded-md font-semibold text-[12px]">Active</span></td>
+                  <td>
+                    <button className="font-semibold p-1 px-2 rounded-md hover:bg-gray-200 transition duration-300">View Profile</button>
+                  </td>
+                </tr>
+              </tbody>
+            ) )}
           </table>
         </div>
       </div>

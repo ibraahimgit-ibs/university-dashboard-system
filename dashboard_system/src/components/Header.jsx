@@ -1,12 +1,11 @@
+import { useEffect, useState } from "react";
 import { FaRegBell, FaRegMoon } from "react-icons/fa";
 import { IoSunnyOutline } from "react-icons/io5";
-import SwitchRole from "./items/SwitchRole";
-import ProfileCard from "./items/ProfileCard";
-import { useState, useEffect } from "react";
 import { TiThMenu } from "react-icons/ti";
-import { roleMethodState, showMenu } from './../atom/atom';
+import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { useLocation } from "react-router";
+import { roleMethodState, showMenu } from './../atom/atom';
+import ProfileCard from "./items/ProfileCard";
 
 
 const Header = () => {
@@ -50,9 +49,16 @@ const Header = () => {
         <div>
             <header className="max-w-full min-w-full flex items-center justify-between border-b border-gray-300 text-black px-4 py-4">
                 <div className="flex lg:space-x-3 sm:space-x-0 items-center justify-center">
-                    <TiThMenu className="w-5 h-5 mx-3 ml-0 lg:hidden md:hidden sm:block" onClick={() => setSHoWmenu( !shoWmenu )} />
+                    {( roleMethod.student || roleMethod.sbo_admin || roleMethod.registrar_admin || roleMethod.super_admin ) && (
+                        <TiThMenu
+                            className="w-5 h-5 mx-3 ml-0 lg:hidden md:hidden sm:block"
+                            onClick={() => setSHoWmenu( !shoWmenu )}
+                        />
+                    )}
                     <h1 className="font-semibold md:text-2xl sm:text-sm lg:text-2xl">Student Info System</h1>
-                    <div className={`${ roleNameColor } border border-gray-300 p-2 py-0 rounded-2xl font-semibold hidden lg:block md:block`}>{text}</div>
+                    {( roleMethod.student || roleMethod.sbo_admin || roleMethod.registrar_admin || roleMethod.super_admin ) && (
+                        <div className={`${ roleNameColor } border border-gray-300 p-2 py-0 rounded-2xl font-semibold hidden lg:block md:block`}>{text}</div>
+                    )}
                 </div>
                 <div className="flex items-center justify-center md:gap-4 lg:gap-4 sm:gap-2">
 
@@ -64,7 +70,7 @@ const Header = () => {
                         </>}
                     </div>
                     <div>
-                        {location.pathname !== "/" && <SwitchRole />}
+                        {/* {location.pathname !== "/" && <SwitchRole />} */}
                     </div>
                     {location.pathname !== "/" && <div className="flex relative rounded-lg p-3 hover:bg-gray-200 transition">
                         <FaRegBell />

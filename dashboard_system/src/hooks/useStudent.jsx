@@ -2,40 +2,46 @@ import axios from 'axios';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { roleMethodState, userDataState } from "../atom/atom";
+import { LoadingState, roleMethodState, userDataState } from "../atom/atom";
 import StudentContext from "./studentContext";
+import axiosUrl from './axiosUrl';
 
 export const StudentProvidor = ( { children } ) => {
 
-    const [student, setStudent] = useState( null )
+    const [UserData, setUserData] = useState( null )
     const [isOpened, setIsOpened] = useState( false );
     const [__, setRoleMethod] = useRecoilState( roleMethodState );
-    const [____, setStudentData] = useRecoilState( userDataState );
+    const [studentData, setStudentData] = useRecoilState( userDataState );
+    const [_____, setLoading] = useRecoilState( LoadingState );
     const navigate = useNavigate();
 
 
-    const logout = () => {
+        const { axiosDeffaultUrl } = axiosUrl();
 
+    const logout = () => {
+        setLoading( true )
         try {
-            axios.post( "/api/logout", { Credential: true } )
-            localStorage.removeItem( "student" );
+            axios.post( `${axiosDeffaultUrl}/api/user/logout`, { Credential: true } )
+            localStorage.removeItem( "user" );
             localStorage.removeItem( "expirationTime" );
-            setStudent( null );
+            setUserData( null );
             navigate( "/" );
-            setRoleMethod( prev => ( { ...prev, student: false } ) );
+            setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: false, registrar_admin: false, super_admin: false } ) );
         } catch ( err ) {
             console.log( "error for logout", err )
+        } finally {
+            setLoading( false )
         }
 
     }
 
     useEffect( () => {
-        const storedStudent = localStorage.getItem( "student" );
+        const storedStudent = localStorage.getItem( "user" );
         const expirationTime = localStorage.getItem( "expirationTime" );
 
         if ( storedStudent && expirationTime ) {
             if ( Date.now() < Number( expirationTime ) ) {
-                setStudent( JSON.parse( storedStudent ) );
+                setUserData( JSON.parse( storedStudent ) );
             } else {
                 logout();
             }
@@ -45,17 +51,18 @@ export const StudentProvidor = ( { children } ) => {
 
     const login = ( studentData, expiresIn ) => {
         const expirationTime = Date.now() + expiresIn * 1000;
-        localStorage.setItem( "student", JSON.stringify( studentData ) );
+        localStorage.setItem( "user", JSON.stringify( studentData ) );
         localStorage.setItem( "expirationTime", expirationTime.toString() );
-        setStudent( studentData );
+        setUserData( studentData );
     };
 
 
     // edit grade
     const handleUpdateGrade = async ( student_id, subject_id, term_id, newGrade ) => {
-        try {
+        setLoading( true )
 
-            const res = await axios.put( "https://university-dashboard-system.onrender.com/api/student/update-grade", {
+        try {
+            const res = await axios.put( `${axiosDeffaultUrl}/api/user/update-grade`, {
                 student_id: student_id,
                 subject_id: subject_id,
                 term_id: term_id,
@@ -74,17 +81,22 @@ export const StudentProvidor = ( { children } ) => {
                 )
             } ) );
 
-
-
-
         } catch ( error ) {
             console.error( "Error updating grade:", error );
+        } finally {
+            setLoading( false )
         }
     }
+
+    // ***********student logged data*****************
+    const { grades, students } = studentData;
+    const student = UserData?.id ? students?.find( st => st.user_id === UserData.id ) : null;
+    const studentGrades = student?.id ? grades?.filter( grade => grade.student_id === student.id ) : [];
+    // ***********___________________*****************
     // _________
 
     return (
-        <StudentContext.Provider value={{ student, setStudent, login, logout, handleUpdateGrade, isOpened, setIsOpened }}>
+        <StudentContext.Provider value={{ UserData, login, logout, handleUpdateGrade, isOpened, setIsOpened, studentGrades, student }}>
             {children}
         </StudentContext.Provider>
     );

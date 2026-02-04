@@ -21,20 +21,11 @@ export const studentData = async ( req, res ) => {
 
 
     const studentsResult = await pool.query( 'SELECT * FROM students' );
-    const subjectsResult = await pool.query( 'SELECT * FROM subjects' );
     const GradesResult = await pool.query( 'SELECT s.f_name, sub.sub_name AS subject, t.term_name AS term, g.id, g.grade, g.enrolment_date, g.student_id, g.subject_id, g.term_id FROM grades g JOIN students s ON g.student_id = s.id JOIN subjects sub ON g.subject_id = sub.id JOIN terms t ON g.term_id = t.id;' );
 
-    // Map students oo password oo delete password si aan front uga muuqan
-    const students = studentsResult.rows.map( student => {
-      const { st_pass, ...rest } = student; // destructure st_pass
-      return rest; // return student without st_pass
-    } );
-
-    const subjects = subjectsResult.rows;
 
     res.json( {
-      students,
-      subjects,
+      students: studentsResult.rows,
       grades: GradesResult.rows
     } );
 
@@ -47,41 +38,52 @@ export const studentData = async ( req, res ) => {
 export const loginStudent = async ( req, res ) => {
   try {
 
-    const { id, password } = req.body;
+    const { username, password } = req.body;
 
-    const isStudentExist = await pool.query(
-      "SELECT * FROM students WHERE id = $1",
-      [id]
+    const isUserExist = await pool.query(
+      "SELECT * FROM users WHERE username = $1",
+      [username]
     );
 
-    if ( isStudentExist.rows.length === 0 ) {
-      return res.status( 400 ).send( "invalid ID" );
+    if ( isUserExist.rows.length === 0 ) {
+      return res.status( 400 ).send( "invalid username" );
     }
 
-    const student = isStudentExist.rows[0];
+    const user = isUserExist.rows[0];
 
-    const isPasswordCorrect = await bcrypt.compare( password, student.st_pass );
-
+    const isPasswordCorrect = await bcrypt.compare( password, user.password );
     if ( !isPasswordCorrect ) return res.status( 400 ).send( "incorrect password" );
+
+    // update last_login
+    await pool.query(
+      "UPDATE users SET last_login = NOW() WHERE id = $1",
+      [user.id]
+    );
 
     // token generate
     const expiresIn = 7 * 24 * 60 * 60;
 
-    const token = jwt.sign( { id: student.id }, JWT_SECRET, { expiresIn } )
+    const token = jwt.sign( {
+      userId: user.id,
+      role: user.role
+    }, JWT_SECRET,
+      { expiresIn }
+    );
 
     res.cookie( 'token', token, {
       httpOnly: true,
-      // secure: false,
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      // secure: true,
+      // sameSite: 'none',
       path: '/',
       maxAge: expiresIn * 1000,
     } );
 
-    student.st_pass = undefined;
+    user.password = undefined;
+    user.username = undefined;
 
 
-    res.status( 200 ).send( { ...student, expiresIn } );
+    res.status( 200 ).send( { ...user, expiresIn } );
 
   } catch ( err ) {
     console.log( 'error at login student ', err )
@@ -90,18 +92,41 @@ export const loginStudent = async ( req, res ) => {
 };
 
 export const registStudent = async ( req, res ) => {
-  const { f_name, s_name, l_name, gender, st_pass } = req.body;
-  const hashedPassword = await bcrypt.hash( st_pass, 10 );
+  const { f_name, s_name, l_name, gender, password, role } = req.body;
+  const hashedPassword = await bcrypt.hash( password, 10 );
+
+  const client = await pool.connect();
 
   try {
+    await client.query( "BEGIN" );
+    const username = `${ role.toUpperCase() }-${ Date.now() }`;
 
-    const result = await pool.query( "INSERT INTO students (f_name, s_name, l_name, gender, st_pass) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [f_name, s_name, l_name, gender, hashedPassword]
-    )
+    const userResult = await client.query(
+      "INSERT INTO users (username, password, role) VALUES ($1, $2, $3) RETURNING id, role",
+      [username, hashedPassword, role]
+    );
+
+    const userId = userResult.rows[0].id;
+    const userRole = userResult.rows[0].role;
+
+    if ( userRole === "student" ) {
+      const result = await client.query( "INSERT INTO students (f_name, s_name, l_name, gender, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [f_name, s_name, l_name, gender, userId]
+      );
+      return;
+    }
+
+    await client.query( "COMMIT" );
 
     res.status( 201 ).send( "Registered Successfully" );
 
   } catch ( error ) {
+    if ( error.constraint === 'users_role_check' ) {
+      return res.status( 400 ).json( {
+        error: "Role can be only (student, teacher, admin)"
+      } );
+    }
+
     res.status( 400 ).send( error.message );
   }
 }

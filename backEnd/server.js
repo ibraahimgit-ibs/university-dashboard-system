@@ -1,9 +1,9 @@
-import express from 'express';
-import studentRouter from './routes/student.js';
-import { port as PORT } from './config/config.js';
-import cors from "cors";
-import { authenticate } from './middleware/authMiddleware.js';
 import cookieParser from 'cookie-parser';
+import cors from "cors";
+import express from 'express';
+import { port as PORT } from './config/config.js';
+import { authenticate } from './middleware/authMiddleware.js';
+import userRouter from './routes/user.js';
 
 const app = express();
 app.use( express.json() );
@@ -20,21 +20,18 @@ app.use( ( err, req, res, next ) => {
 } );
 
 
-app.use( '/api/student', studentRouter );
+// ***************Routes**************//
+app.use( '/api/user', userRouter );
+// -----------------------------------//
 
 
 // **********auth**********//
 app.get( "/api/check-auth", authenticate, ( req, res ) => {
   res.set( 'Cache-Control', 'no-store' );
-  res.json( { loggedIn: true, student: req.student } );
+  res.json( { loggedIn: true, user: req.student } );
 } );
 // -------------------------
 
-// **********logout**********//
-app.post( "/api/logout", ( req, res ) => {
-  res.status( 200 ).json( { message: "Logged out successfully" } );
-} );
-// -------------------------
 
 
 app.listen( PORT, () => {
