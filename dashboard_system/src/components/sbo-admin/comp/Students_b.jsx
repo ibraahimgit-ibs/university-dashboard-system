@@ -1,11 +1,47 @@
 import { useRecoilState } from "recoil";
 import { userDataState } from "../../../atom/atom";
+import { useCallback, useEffect, useState } from "react";
 
 
 const Students_b = () => {
-  const [userData, __] = useRecoilState( userDataState );
+  const [userData, setUserData] = useRecoilState( userDataState );
+  const [search, setSearch] = useState( "" );
 
   const { students } = userData;
+
+  const handleSearch = useCallback( () => {
+    const trimmed = search.trim();
+    if ( trimmed.length === 0 ) {
+      setUserData( prev => ( { ...prev, selectedStudent: null } ) );
+      return;
+    }
+
+    const lowered = trimmed.toLowerCase();
+    const searchedStudent = students?.find( st => {
+      const idMatch = String( st?.id ?? "" ).includes( trimmed );
+      const nameMatch = String( st?.f_name ?? "" ).toLowerCase().includes( lowered );
+      return idMatch || nameMatch;
+    } );
+
+    setUserData( prev => ( { ...prev, selectedStudent: searchedStudent ?? null } ) );
+  }, [students, search, setUserData] );
+
+  useEffect( () => {
+    handleSearch();
+  }, [handleSearch, search] );
+
+
+
+  const filteredStudents = Array.isArray( students )
+    ? students.filter( st => {
+      const trimmed = search.trim();
+      if ( trimmed.length === 0 ) return true;
+      const lowered = trimmed.toLowerCase();
+      const idMatch = String( st?.id ?? "" ).includes( trimmed );
+      const nameMatch = String( st?.f_name ?? "" ).toLowerCase().includes( lowered );
+      return idMatch || nameMatch;
+    } )
+    : [];
 
   return (
     <div>
@@ -35,8 +71,10 @@ const Students_b = () => {
           {/* Input */}
           <input
             type="text"
+            value={search}
+            onChange={( e ) => setSearch( e.target.value )}
             placeholder="Search students by name or ID..."
-            className="ml-2 w-full bg-transparent text-gray-500 placeholder-gray-500 outline-none"
+            className="ml-2 w-full bg-transparent placeholder-gray-500 outline-none"
           />
         </div>
 
@@ -53,20 +91,29 @@ const Students_b = () => {
                 <th>Action</th>
               </tr>
             </thead>
-            {Array.isArray( students ) && students?.map( ( st, i ) => (
-              <tbody key={i}>
+            {filteredStudents.map( ( st, i ) => (
+                <tbody key={i}>
+                  <tr>
+                    <td className="font-semibold">{st?.id}</td>
+                    <td>{st?.f_name}</td>
+                    <td>3</td>
+                    <td >3.35</td>
+                    <td><span className="paid rounded-md font-semibold text-[12px]">Active</span></td>
+                    <td>
+                      <button className="font-semibold p-1 px-2 rounded-md hover:bg-gray-200 transition duration-300">View Profile</button>
+                    </td>
+                  </tr>
+                </tbody>
+              ) )}
+            {search.trim().length > 0 && filteredStudents.length === 0 && (
+              <tbody>
                 <tr>
-                  <td className="font-semibold">{st?.id}</td>
-                  <td>{st?.f_name}</td>
-                  <td>3</td>
-                  <td >3.35</td>
-                  <td><span className="paid rounded-md font-semibold text-[12px]">Active</span></td>
-                  <td>
-                    <button className="font-semibold p-1 px-2 rounded-md hover:bg-gray-200 transition duration-300">View Profile</button>
+                  <td colSpan="6" className="py-4 text-center text-gray-500">
+                    No result for searched.
                   </td>
                 </tr>
               </tbody>
-            ) )}
+            )}
           </table>
         </div>
       </div>
