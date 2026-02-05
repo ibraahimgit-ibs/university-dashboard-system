@@ -24,7 +24,7 @@ const useAuth = () => {
 
             try {
                 // ${ axiosDeffaultUrl }
-                const res = await axios.get( `${ axiosDeffaultUrl}/api/check-auth`, { withCredentials: true } );
+                const res = await axios.get( `${ axiosDeffaultUrl }/api/check-auth`, { withCredentials: true } );
                 if ( res.data.loggedIn ) {
                     setUser( res.data );
                     setLogged( true );
@@ -43,6 +43,7 @@ const useAuth = () => {
                             navigate( "/sbo-admin/dashboard" );
                         }
                         setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: true, registrar_admin: false, super_admin: false } ) );
+                        return;
                     }
                 } else {
                     setUser( null );
