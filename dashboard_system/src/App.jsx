@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Toaster } from 'react-hot-toast'
 import { useRecoilState } from "recoil"
-import { LoadingState, userDataState } from "./atom/atom"
+import { LoadingState, roleMethodState, userDataState } from "./atom/atom"
 import Header from "./components/Header"
 import SideBar from "./components/SideBar"
 import Window from "./components/Window"
@@ -15,7 +15,8 @@ import axiosUrl from './hooks/axiosUrl';
 
 function App() {
   const [SD, setStudentData] = useRecoilState( userDataState );
-  const [loadingCircle, ____] = useRecoilState( LoadingState )
+  const [loadingCircle, setLoading] = useRecoilState( LoadingState )
+  const [roleMethod, __] = useRecoilState( roleMethodState )
   const [show, setShow] = useState( false );
 
   const { axiosDeffaultUrl } = axiosUrl();
@@ -26,12 +27,15 @@ function App() {
 
   useEffect( () => {
     async function fetchData() {
-      // ${axiosDeffaultUrl}
+      setLoading( true );
+
       try {
-        const respons = await axios.get( `${ axiosDeffaultUrl}/api/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
+        const respons = await axios.get( `${ axiosDeffaultUrl }/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
         setStudentData( respons.data );
       } catch ( err ) {
         console.error( err );
+      } finally {
+        setLoading( false )
       }
     }
 
@@ -42,13 +46,13 @@ function App() {
   const { loading, logged } = useAuth();
 
   useEffect( () => {
-    if ( logged ) {
+    if ( roleMethod.student || roleMethod.sbo_admin || roleMethod.registrar_admin || roleMethod.super_admin ) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setShow( true );
       return
     }
     return setShow( false );
-  }, [logged, navigate] );
+  }, [logged, navigate, roleMethod] );
 
 
 
@@ -67,7 +71,7 @@ function App() {
         {show && <SideBar />}
       </main>
       <Toaster />
-      {loadingCircle  && <CircularUnderLoad />}
+      {loadingCircle && <CircularUnderLoad />}
     </div>
   );
 };

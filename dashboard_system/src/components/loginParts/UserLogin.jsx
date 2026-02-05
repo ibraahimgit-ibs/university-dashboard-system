@@ -58,13 +58,13 @@ const UserLogin = () => {
 
         try {
             // ${ axiosDeffaultUrl }
-            const { data } = await axios.post( `${ axiosDeffaultUrl}/api/user/login-user`, formData, { withCredentials: true } );
+            const { data } = await axios.post( `${ axiosDeffaultUrl}/user/login-user`, formData, { withCredentials: true } );
             toast.success( "successfully login" );
             setLoading( false );
             login( data, data.expiresIn );
             
             // Ensure dashboard has fresh data immediately after login
-            const refreshed = await axios.get( `${ axiosDeffaultUrl}/api/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
+            const refreshed = await axios.get( `${ axiosDeffaultUrl}/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
             setStudentData( refreshed.data );
             // ****************checking role to navigate*****************
             if ( data.role === "student" ) {

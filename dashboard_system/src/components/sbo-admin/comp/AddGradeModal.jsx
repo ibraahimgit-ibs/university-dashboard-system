@@ -35,12 +35,12 @@ const AddGradeModal = () => {
 
         try {
             // ${ axiosDeffaultUrl }
-            await axios.post( `${ axiosDeffaultUrl}/api/user/add-grades`, formData, { withCredentials: true, } );
+            await axios.post( `${ axiosDeffaultUrl}/user/add-grades`, formData, { withCredentials: true, } );
             // console.log( "Grade added:", res.data );
             setFormData( { student_id: "", subject_id: "", term_id: "", grade: "" } );
 
             // Refresh full data so subject/term names are hydrated
-            const refreshed = await axios.get( `${ axiosDeffaultUrl}/api/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
+            const refreshed = await axios.get( `${ axiosDeffaultUrl}/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
             setStudentData( refreshed.data );
 
             toast.success( "Successfully Added Grade" )

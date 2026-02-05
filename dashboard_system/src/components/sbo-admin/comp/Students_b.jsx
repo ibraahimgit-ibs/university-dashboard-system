@@ -15,8 +15,34 @@ const Students_b = () => {
           <p className="text-gray-500">View and manage student information</p>
         </div>
 
+        <div className="flex items-center w-full border border-white rounded-lg bg-[#e8e6e6] px-2 py-1 my-3 mt-6 focus-within:border-[#00000069] focus-within:ring-3 focus-within:ring-[#d6d1d1] transition">
+          {/* Icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
+            />
+          </svg>
+
+          {/* Input */}
+          <input
+            type="text"
+            placeholder="Search students by name or ID..."
+            className="ml-2 w-full bg-transparent text-gray-500 placeholder-gray-500 outline-none"
+          />
+        </div>
+
+
         <div className="overflow-x-auto">
-          <table className="w-full mt-6 text-sm">
+          <table className="w-full text-sm">
             <thead>
               <tr>
                 <th>Student ID</th>

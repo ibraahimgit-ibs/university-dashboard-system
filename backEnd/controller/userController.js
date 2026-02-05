@@ -99,8 +99,8 @@ export const registStudent = async ( req, res ) => {
 
   try {
     await client.query( "BEGIN" );
-    const username = `${ role.toUpperCase() }-${ Date.now() }`;
 
+    const username = `${ role.toUpperCase() }-${ Date.now() }`;
     const userResult = await client.query(
       "INSERT INTO users (username, password, role) VALUES ($1, $2, $3) RETURNING id, role",
       [username, hashedPassword, role]
@@ -110,26 +110,25 @@ export const registStudent = async ( req, res ) => {
     const userRole = userResult.rows[0].role;
 
     if ( userRole === "student" ) {
-      const result = await client.query( "INSERT INTO students (f_name, s_name, l_name, gender, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      await client.query(
+        "INSERT INTO students (f_name, s_name, l_name, gender, user_id) VALUES ($1, $2, $3, $4, $5)",
         [f_name, s_name, l_name, gender, userId]
       );
-      return;
     }
 
     await client.query( "COMMIT" );
-
     res.status( 201 ).send( "Registered Successfully" );
-
   } catch ( error ) {
-    if ( error.constraint === 'users_role_check' ) {
-      return res.status( 400 ).json( {
-        error: "Role can be only (student, teacher, admin)"
-      } );
+    await client.query( "ROLLBACK" );
+    if ( error.constraint === "users_role_check" ) {
+      return res.status( 400 ).json( { error: "Role can be only (student, teacher, admin)" } );
     }
-
     res.status( 400 ).send( error.message );
+  } finally {
+    client.release();
   }
-}
+};
+
 
 export const addGrades = async ( req, res ) => {
   const { student_id, subject_id, term_id, grade } = req.body;

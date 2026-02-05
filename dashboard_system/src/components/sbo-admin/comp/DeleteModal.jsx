@@ -34,7 +34,7 @@ const DeleteModal = ( { delOpen, setDelOpen, setStudentData, clickedData } ) => 
 
         try {
             // ${ axiosDeffaultUrl }
-            await axios.delete( `${ axiosDeffaultUrl}/api/user/delete-grade`, {
+            await axios.delete( `${ axiosDeffaultUrl}/user/delete-grade`, {
                 withCredentials: true,
                 data: { id }
             } );

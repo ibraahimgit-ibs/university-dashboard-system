@@ -21,7 +21,7 @@ export const StudentProvidor = ( { children } ) => {
     const logout = () => {
         setLoading( true )
         try {
-            axios.post( `${axiosDeffaultUrl}/api/user/logout`, { Credential: true } )
+            axios.post( `${axiosDeffaultUrl}/user/logout`, { Credential: true } )
             localStorage.removeItem( "user" );
             localStorage.removeItem( "expirationTime" );
             setUserData( null );
@@ -62,7 +62,7 @@ export const StudentProvidor = ( { children } ) => {
         setLoading( true )
 
         try {
-            const res = await axios.put( `${axiosDeffaultUrl}/api/user/update-grade`, {
+            const res = await axios.put( `${axiosDeffaultUrl}/user/update-grade`, {
                 student_id: student_id,
                 subject_id: subject_id,
                 term_id: term_id,
