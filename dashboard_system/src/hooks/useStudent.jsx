@@ -18,22 +18,32 @@ export const StudentProvidor = ( { children } ) => {
 
         const { axiosDeffaultUrl } = axiosUrl();
 
-    const logout = () => {
-        setLoading( true )
+    const logout = async () => {
+        setLoading( true );
         try {
-            axios.post( `${axiosDeffaultUrl}/user/logout`, { Credential: true } )
+            await axios.post(
+                `${ axiosDeffaultUrl }/user/logout`,
+                {},
+                { withCredentials: true }
+            );
             localStorage.removeItem( "user" );
             localStorage.removeItem( "expirationTime" );
             setUserData( null );
             navigate( "/" );
-            setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: false, registrar_admin: false, super_admin: false } ) );
+            setRoleMethod( prev => ( {
+                ...prev,
+                student: false,
+                sbo_admin: false,
+                registrar_admin: false,
+                super_admin: false
+            } ) );
         } catch ( err ) {
-            console.log( "error for logout", err )
+            console.log( "error for logout", err );
         } finally {
-            setLoading( false )
+            setLoading( false );
         }
+    };
 
-    }
 
     useEffect( () => {
         const storedStudent = localStorage.getItem( "user" );

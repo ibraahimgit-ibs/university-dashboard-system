@@ -23,9 +23,15 @@ userRouter.delete( '/delete-grade', authenticate, authorizeTeacher, deleteGrade 
 
 // **********logout**********//
 userRouter.post( "/logout", ( req, res ) => {
-    res.clearCookie( "token" )
+    res.clearCookie( "token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    } );
     res.status( 200 ).json( { message: "Logged out successfully" } );
 } );
+
 // -------------------------
 
 
