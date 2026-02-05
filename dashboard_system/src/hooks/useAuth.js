@@ -24,7 +24,7 @@ const useAuth = () => {
 
             try {
                 // ${ axiosDeffaultUrl }
-                const res = await axios.get( `${ axiosDeffaultUrl }/check-auth`, { withCredentials: true } );
+                const res = await axios.get( `${ axiosDeffaultUrl }api/check-auth`, { withCredentials: true } );
                 if ( res.data.loggedIn ) {
                     setUser( res.data );
                     setLogged( true );
