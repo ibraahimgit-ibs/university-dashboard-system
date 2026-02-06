@@ -5,6 +5,7 @@ import { useStudent } from "./hooks/useStudent";
 import Login from "./pages/Login";
 import SboAdmin from "./pages/SboAdmin";
 import Student from './pages/Student';
+import RegistrarAdmin from './pages/RegistrarAdmin';
 
 const PagesMain = () => {
     const [roleMethod] = useRecoilState( roleMethodState );
@@ -18,6 +19,7 @@ const PagesMain = () => {
             </Routes>
             {roleMethod.student && UserData?.role === "student" && <Student />}
             {roleMethod.sbo_admin && UserData?.role === "teacher" && <SboAdmin />}
+            {roleMethod.registrar_admin && UserData?.role === "admin" && <RegistrarAdmin />}
         </main>
     )
 }

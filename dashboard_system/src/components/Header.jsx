@@ -74,7 +74,11 @@ const Header = () => {
                     </div>
                     {location.pathname !== "/" && <div className="flex relative rounded-lg p-3 hover:bg-gray-200 transition">
                         <FaRegBell />
-                        <span className="absolute top-0 right-0 text-white text-sm bg-red-600 rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                        <span
+                            className="absolute top-0 right-0 text-white text-sm bg-red-600 rounded-full h-4 w-4 flex items-center justify-center"
+                        >
+                            3
+                        </span>
                     </div>}
                     {location.pathname !== "/" && <ProfileCard />}
                 </div>

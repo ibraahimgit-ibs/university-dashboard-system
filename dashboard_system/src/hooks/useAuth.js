@@ -45,6 +45,14 @@ const useAuth = () => {
                         setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: true, registrar_admin: false, super_admin: false } ) );
                         return;
                     }
+
+                    if ( role === "admin" ) {
+                        if ( location.pathname === "/" ) {
+                            navigate( "/registrar-admin/dashboard" );
+                        }
+                        setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: false, registrar_admin: true, super_admin: false } ) );
+                        return;
+                    }
                 } else {
                     setUser( null );
                     navigate( '/' );

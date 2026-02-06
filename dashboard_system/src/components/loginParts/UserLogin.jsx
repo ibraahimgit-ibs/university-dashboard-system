@@ -46,6 +46,13 @@ const UserLogin = () => {
             }
             setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: true, registrar_admin: false, super_admin: false } ) );
         }
+
+        if ( UserData.role === "admin" ) {
+            if ( location.pathname === "/" ) {
+                navigate( "/registrar-admin/dashboard" );
+            }
+            setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: false, registrar_admin: true, super_admin: false } ) );
+        }
     }, [navigate, UserData, setRoleMethod, location.pathname] );
 
     console.log(roleMethod);
@@ -70,9 +77,12 @@ const UserLogin = () => {
             if ( data.role === "student" ) {
                 navigate( "/student/dashboard" );
                 setRoleMethod( { ...roleMethod, student: true, sbo_admin: false, registrar_admin: false, super_admin: false } );
-            } else {
+            } else if (data.role === "teacher") {
                 navigate( "/sbo-admin/dashboard" );
                 setRoleMethod( { ...roleMethod, student: false, sbo_admin: true, registrar_admin: false, super_admin: false } );
+            } else {
+                navigate("/registrar-admin/dashboard")
+                setRoleMethod( { ...roleMethod, student: false, sbo_admin: false, registrar_admin: true, super_admin: false } );
             }
             // ****************--------------------------*****************
         } catch ( err ) {

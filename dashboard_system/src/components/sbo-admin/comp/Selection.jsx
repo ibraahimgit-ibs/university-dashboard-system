@@ -124,7 +124,7 @@ const Selection = ( { students } ) => {
                             <tr>
                                 <th>Subjects</th>
                                 <th>Grade</th>
-                                <th>Letter Grade</th>
+                                <th>G_Letter</th>
                                 <th>Term</th>
                                 <th>Enrolment_Date</th>
                                 <th>Actions</th>
