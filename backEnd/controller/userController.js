@@ -189,3 +189,24 @@ export const deleteGrade = async ( req, res ) => {
   }
 };
 
+export const changePassword = async ( req, res ) => {
+  const { newPassword, id } = req.body;
+
+  const hashedPass = await bcrypt.hash( newPassword, 10 );
+
+  try {
+
+    const result = await pool.query( "UPDATE users SET password = $1 WHERE id = $2",
+      [hashedPass, id]
+    );
+
+    result.password = undefined;
+    result.username = undefined;
+
+    res.status( 200 ).json( { message: "SuccesFully Updated"} )
+  } catch ( err ) {
+    console.error( "error for changing password", err )
+    res.status( 400 ).send( "cant change password, server error!" );
+  };
+
+};

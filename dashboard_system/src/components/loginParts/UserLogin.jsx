@@ -1,28 +1,34 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import {
-    AdminSelectedState,
-    formDataState,
     LoadingState,
     roleMethodState,
     userDataState
 } from '../../atom/atom';
 import { useStudent } from "../../hooks/useStudent";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import axiosUrl from './../../hooks/axiosUrl';
 
 
 const UserLogin = () => {
-    const [formData, setFormData] = useRecoilState( formDataState );
     const [roleMethod, setRoleMethod] = useRecoilState( roleMethodState );
-    const [selected, setSelected] = useRecoilState( AdminSelectedState );
+    // const [selected, setSelected] = useRecoilState( AdminSelectedState );
     const [__, setStudentData] = useRecoilState( userDataState );
     const [_, setLoadingCircle] = useRecoilState( LoadingState )
     const [loading, setLoading] = useState( false );
-    const [open, setOpen] = useState( false );
+    // const [open, setOpen] = useState( false );
+
+    // ***useform*****
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+    // --------------
+
     const navigate = useNavigate();
 
     const { login, UserData } = useStudent();
@@ -55,33 +61,32 @@ const UserLogin = () => {
         }
     }, [navigate, UserData, setRoleMethod, location.pathname] );
 
-    console.log(roleMethod);
-    
 
-    const handleSubmit = async ( e ) => {
-        e.preventDefault();
+
+    const Onsubmit = async ( dt ) => {
+        // e.preventDefault();
         setLoading( true );
         setLoadingCircle( true );
 
         try {
             // ${ axiosDeffaultUrl }
-            const { data } = await axios.post( `${ axiosDeffaultUrl}/user/login-user`, formData, { withCredentials: true } );
+            const { data } = await axios.post( `${ axiosDeffaultUrl }/user/login-user`, dt, { withCredentials: true } );
             toast.success( "successfully login" );
             setLoading( false );
             login( data, data.expiresIn );
-            
+
             // Ensure dashboard has fresh data immediately after login
-            const refreshed = await axios.get( `${ axiosDeffaultUrl}/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
+            const refreshed = await axios.get( `${ axiosDeffaultUrl }/user/user-data`, { withCredentials: true, headers: { "Cache-Control": "no-cache" } } );
             setStudentData( refreshed.data );
             // ****************checking role to navigate*****************
             if ( data.role === "student" ) {
                 navigate( "/student/dashboard" );
                 setRoleMethod( { ...roleMethod, student: true, sbo_admin: false, registrar_admin: false, super_admin: false } );
-            } else if (data.role === "teacher") {
+            } else if ( data.role === "teacher" ) {
                 navigate( "/sbo-admin/dashboard" );
                 setRoleMethod( { ...roleMethod, student: false, sbo_admin: true, registrar_admin: false, super_admin: false } );
             } else {
-                navigate("/registrar-admin/dashboard")
+                navigate( "/registrar-admin/dashboard" )
                 setRoleMethod( { ...roleMethod, student: false, sbo_admin: false, registrar_admin: true, super_admin: false } );
             }
             // ****************--------------------------*****************
@@ -94,14 +99,6 @@ const UserLogin = () => {
         }
     };
 
-    const handleInputChange = ( event ) => {
-        setFormData( {
-            ...formData,
-            [event.target.id]: event.target.value,
-        } )
-    }
-
-
     return (
         <div className="w-full max-w-md rounded-2xl bg-white p-8 mt-10 md:shadow-md sm:shadow-none">
             <div className="mb-8 text-center">
@@ -109,9 +106,9 @@ const UserLogin = () => {
                 <p className="text-slate-500">Please enter your details</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="relative space-y-5">
+            <form onSubmit={handleSubmit( Onsubmit )} className="relative space-y-5">
                 {/* Role Selection */}
-                <div>
+                {/* <div>
                     <label className="mb-2 block text-sm font-semibold text-slate-700">Choose Role</label>
                     <div
                         className="bg-white border border-slate-400 flex items-center justify-between rounded-md p-2 mb-0.5 min-w-15 max-w-md"
@@ -142,18 +139,21 @@ const UserLogin = () => {
                             onClick={() => setSelected( prev => ( { ...prev, admin: true, student: false } ) )}
                         >Teacher Administrator</button>
                     </div>}
-                </div>
+                </div> */}
 
                 {/* ID Field */}
                 <div>
-                    <label className="mb-2 block text-sm font-semibold text-slate-700">Your ID</label>
+                    <label className="mb-2 block text-sm font-semibold text-slate-700">Username</label>
                     <input
                         type="text"
                         placeholder="Enter Your username"
-                        onChange={handleInputChange}
-                        id='username'
-                        className="w-full rounded-lg border border-slate-300 p-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                        className={`w-full rounded-lg border border-slate-300 p-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 ${ errors.username && "border-red-500 ring-2 ring-red-300" }`}
+                        {...register( 'username', { required: true } )}
                     />
+                    {errors.username && ( <p className="p-1 text-[13px] font-semibold text-orange-500">
+                        Please enter username.
+                    </p>
+                    )}
                 </div>
 
                 {/* Password Field */}
@@ -162,10 +162,13 @@ const UserLogin = () => {
                     <input
                         type="password"
                         placeholder="Your Password"
-                        id='password'
-                        onChange={handleInputChange}
-                        className="w-full rounded-lg border border-slate-300 p-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                        className={`w-full rounded-lg border border-slate-300 p-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 ${ errors.password && "border-red-500 ring-2 ring-red-300" }`}
+                        {...register( 'password', { required: true } )}
                     />
+                    {errors.password && ( <p className="p-1 font-semibold text-[13px] text-orange-500">
+                        Please enter password.
+                    </p>
+                    )}
                 </div>
 
                 {/* Remember & Forgot */}

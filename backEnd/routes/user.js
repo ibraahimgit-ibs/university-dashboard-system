@@ -1,6 +1,7 @@
 import express from 'express'
 import {
     addGrades,
+    changePassword,
     deleteGrade,
     loginStudent,
     registStudent,
@@ -20,6 +21,7 @@ userRouter.post( '/regist-user', authenticate, authorizeAdmin, registStudent );
 userRouter.post( '/add-grades', authenticate, authorizeTeacher, addGrades );
 userRouter.put( '/update-grade', authenticate, authorizeTeacher, updateGrade );
 userRouter.delete( '/delete-grade', authenticate, authorizeTeacher, deleteGrade );
+userRouter.put( '/changePassword', authenticate, changePassword );
 
 // **********logout**********//
 userRouter.post( "/logout", ( req, res ) => {

@@ -30,14 +30,6 @@ export const userDataState = atom( { //.....
   default: []
 } )
 
-export const formDataState = atom( {
-  key: 'formDataState',
-  default: {
-    id: null,
-    password: null,
-  }
-} )
-
 export const gradeEntryWindowState = atom( {
   key: 'gradeEntryWindowState',
   default: false
@@ -63,5 +55,11 @@ export const AdminSelectedState = atom( {
 
 export const LoadingState = atom( {
   key: 'LoadingState',
+  default: false
+} )
+
+// *********change password modal state
+export const changePassMOdalState = atom( {
+  key: 'changePassMOdalState',
   default: false
 } )

@@ -47,10 +47,6 @@
     @apply w-full max-w-7xl mx-auto;
   }
 
-  /* .root {
-    @apply relative w-full max-w-7xl  mx-auto;
-  } */
-
   thead {
     @apply w-full;
   }
@@ -101,10 +97,10 @@ body {
     color: #ffffff;
   }
 
-  div {
+  /* div {
     background: #000000;
     color: white;
-  }
+  } */
 
   button {
     color: black;

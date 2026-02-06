@@ -1,9 +1,12 @@
+import { useRecoilState } from "recoil";
 import { useStudent } from "../../../hooks/useStudent";
+import ChangePassModal from "./ChangePassModal";
+import { changePassMOdalState } from "../../../atom/atom";
 
 const Profile = () => {
+    const [_, setOpenPassModal] = useRecoilState( changePassMOdalState );
 
     const { student } = useStudent();
-
 
     return (
         <div className="max-w-full min-w-full">
@@ -69,7 +72,7 @@ const Profile = () => {
                 </div>
                 <div className="w-full mt-5 grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-5">
                     <div className="Q_actions">
-                        <button>Change Password</button>
+                        <button className="w-full h-full" onClick={() => setOpenPassModal( true )}>Change Password</button>
                     </div>
                     <div className="Q_actions">
                         <button>Emergence Contacts</button>
@@ -82,6 +85,9 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+
+
+            <ChangePassModal />
         </div >
     )
 }

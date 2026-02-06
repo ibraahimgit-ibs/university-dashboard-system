@@ -11,6 +11,7 @@ import PagesMain from "./PagesMain"
 import { useNavigate } from "react-router-dom"
 import CircularUnderLoad from "./components/items/CircularProgress"
 import axiosUrl from './hooks/axiosUrl';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 function App() {
@@ -59,8 +60,13 @@ function App() {
 
 
   if ( loading ) {
-    return <div className='bg-white flex items-center justify-center min-w-screen min-h-screen'>Checking Auth...</div>
-  }
+    return (
+      <div className='bg-white flex flex-col gap-5 items-center justify-center min-w-screen min-h-screen'>
+        <CircularProgress />
+        Checking Auth...
+      </div>
+    );
+  };
 
   return (
     <div className="relative w-full h-full">
