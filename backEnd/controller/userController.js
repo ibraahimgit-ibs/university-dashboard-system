@@ -143,10 +143,10 @@ export const loginStudent = async ( req, res ) => {
 
     res.cookie( 'token', token, {
       httpOnly: true,
-      // secure: true,
-      // sameSite: 'none',
-      secure: false, // set true only in HTTPS
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'none',
+      // secure: false, // set true only in HTTPS
+      // sameSite: 'lax',
       path: '/',
       maxAge: expiresIn * 1000,
     } );
