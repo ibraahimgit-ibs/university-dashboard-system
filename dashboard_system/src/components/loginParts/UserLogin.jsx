@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import {
     LoadingState,
@@ -33,33 +33,33 @@ const UserLogin = () => {
 
     const { login, UserData } = useStudent();
     const { axiosDeffaultUrl } = axiosUrl();
-    const location = useLocation();
+    // const location = useLocation();
 
-    useEffect( () => {
-        if ( !UserData?.role ) return;
+    // useEffect( () => {
+    //     if ( !UserData?.role ) return;
 
-        if ( UserData.role === "student" ) {
-            if ( location.pathname === "/" ) {
-                navigate( "/student/dashboard" );
-            }
-            setRoleMethod( prev => ( { ...prev, student: true, sbo_admin: false, registrar_admin: false, super_admin: false } ) );
-            return;
-        }
+    //     if ( UserData.role === "student" ) {
+    //         if ( location.pathname === "/" ) {
+    //             navigate( "/student/dashboard" );
+    //         }
+    //         setRoleMethod( prev => ( { ...prev, student: true, sbo_admin: false, registrar_admin: false, super_admin: false } ) );
+    //         return;
+    //     }
 
-        if ( UserData.role === "teacher" ) {
-            if ( location.pathname === "/" ) {
-                navigate( "/sbo-admin/dashboard" );
-            }
-            setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: true, registrar_admin: false, super_admin: false } ) );
-        }
+    //     if ( UserData.role === "teacher" ) {
+    //         if ( location.pathname === "/" ) {
+    //             navigate( "/sbo-admin/dashboard" );
+    //         }
+    //         setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: true, registrar_admin: false, super_admin: false } ) );
+    //     }
 
-        if ( UserData.role === "admin" ) {
-            if ( location.pathname === "/" ) {
-                navigate( "/registrar-admin/dashboard" );
-            }
-            setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: false, registrar_admin: true, super_admin: false } ) );
-        }
-    }, [navigate, UserData, setRoleMethod, location.pathname] );
+    //     if ( UserData.role === "admin" ) {
+    //         if ( location.pathname === "/" ) {
+    //             navigate( "/registrar-admin/dashboard" );
+    //         }
+    //         setRoleMethod( prev => ( { ...prev, student: false, sbo_admin: false, registrar_admin: true, super_admin: false } ) );
+    //     }
+    // }, [navigate, UserData, setRoleMethod, location.pathname] );
 
 
 

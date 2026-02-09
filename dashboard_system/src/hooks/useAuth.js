@@ -68,7 +68,7 @@ const useAuth = () => {
 
         }
         checkAuth();
-    }, [navigate, location.pathname, UserData, setRoleMethod] )
+    }, [navigate, location.pathname, UserData, setRoleMethod, axiosDeffaultUrl] )
 
     return { user, logged, loading }
 };

@@ -19,10 +19,80 @@ export const studentData = async ( req, res ) => {
       "Expires": "0",
     } );
 
+    const { role } = req.user;
+    const userId = req.user.userId;
 
-    const studentsResult = await pool.query( 'SELECT * FROM students' );
-    const GradesResult = await pool.query( 'SELECT s.f_name, sub.sub_name AS subject, t.term_name AS term, g.id, g.grade, g.enrolment_date, g.student_id, g.subject_id, g.term_id FROM grades g JOIN students s ON g.student_id = s.id JOIN subjects sub ON g.subject_id = sub.id JOIN terms t ON g.term_id = t.id;' );
+    let studentsResult;
+    let GradesResult;
 
+    // ================= ADMIN =================
+    if ( role === "admin" || role === "teacher" ) {
+      studentsResult = await pool.query( 'SELECT * FROM students' );
+
+      GradesResult = await pool.query( `
+        SELECT s.f_name,
+               sub.sub_name AS subject,
+               t.term_name AS term,
+               g.id, g.grade, g.enrolment_date,
+               g.student_id, g.subject_id, g.term_id
+        FROM grades g
+        JOIN students s ON g.student_id = s.id
+        JOIN subjects sub ON g.subject_id = sub.id
+        JOIN terms t ON g.term_id = t.id
+      `);
+    }
+
+
+    // ================= STUDENT =================
+    else if ( role === "student" ) {
+      studentsResult = await pool.query(
+        'SELECT * FROM students WHERE user_id = $1',
+        [userId]
+      );
+
+
+      GradesResult = await pool.query(
+        `
+        SELECT s.f_name,
+               sub.sub_name AS subject,
+               t.term_name AS term,
+               g.id, g.grade, g.enrolment_date,
+               g.student_id, g.subject_id, g.term_id
+        FROM grades g
+        JOIN students s ON g.student_id = s.id
+        JOIN subjects sub ON g.subject_id = sub.id
+        JOIN terms t ON g.term_id = t.id
+        WHERE g.student_id = $1
+        `,
+        [studentsResult.rows[0].id]
+      );
+    }
+
+    // ================= TEACHER =================
+    // else if ( role === "teacher" ) {
+    //   // ⚠️ halkan waxaad ku xireysaa schema-gaaga
+    //   GradesResult = await pool.query(
+    //     `
+    //     SELECT s.f_name,
+    //            sub.sub_name AS subject,
+    //            t.term_name AS term,
+    //            g.id, g.grade, g.enrolment_date,
+    //            g.student_id, g.subject_id, g.term_id
+    //     FROM grades g
+    //     JOIN students s ON g.student_id = s.id
+    //     JOIN subjects sub ON g.subject_id = sub.id
+    //     JOIN terms t ON g.term_id = t.id
+    //     WHERE g.teacher_id = $1
+    //     `,
+    //     [userId]
+    //   );
+
+    //   studentsResult = { rows: [] }; // teacher ma arko students table dhan
+    // }
+
+    else {
+      return res.status( 403 ).json( { message: "Access denied" } );
+    }
 
     res.json( {
       students: studentsResult.rows,
@@ -30,10 +100,11 @@ export const studentData = async ( req, res ) => {
     } );
 
   } catch ( err ) {
-    console.error( 'Error fetching data:', err )
-    res.status( 500 ).json( { error: 'Internal server error' } )
+    console.error( 'Error fetching data:', err );
+    res.status( 500 ).json( { error: 'Internal server error' } );
   }
-}
+};
+
 
 export const loginStudent = async ( req, res ) => {
   try {
@@ -72,9 +143,10 @@ export const loginStudent = async ( req, res ) => {
 
     res.cookie( 'token', token, {
       httpOnly: true,
-      // secure: false,
-      secure: true,
-      sameSite: 'none',
+      // secure: true,
+      // sameSite: 'none',
+      secure: false, // set true only in HTTPS
+      sameSite: 'lax',
       path: '/',
       maxAge: expiresIn * 1000,
     } );
@@ -92,7 +164,7 @@ export const loginStudent = async ( req, res ) => {
 };
 
 export const registStudent = async ( req, res ) => {
-  const { f_name, s_name, l_name, gender, password, role } = req.body;
+  const { f_name, s_name, l_name, gender, studentClass, password, role } = req.body;
   const hashedPassword = await bcrypt.hash( password, 10 );
 
   const client = await pool.connect();
@@ -111,8 +183,8 @@ export const registStudent = async ( req, res ) => {
 
     if ( userRole === "student" ) {
       await client.query(
-        "INSERT INTO students (f_name, s_name, l_name, gender, user_id) VALUES ($1, $2, $3, $4, $5)",
-        [f_name, s_name, l_name, gender, userId]
+        "INSERT INTO students (f_name, s_name, l_name, gender, user_id, class) VALUES ($1, $2, $3, $4, $5, $6)",
+        [f_name, s_name, l_name, gender, userId, studentClass]
       );
     }
 
@@ -190,20 +262,19 @@ export const deleteGrade = async ( req, res ) => {
 };
 
 export const changePassword = async ( req, res ) => {
-  const { newPassword, id } = req.body;
+  const { newPassword } = req.body;
 
   const hashedPass = await bcrypt.hash( newPassword, 10 );
+
 
   try {
 
     const result = await pool.query( "UPDATE users SET password = $1 WHERE id = $2",
-      [hashedPass, id]
+      [hashedPass, req.user.userId]
     );
 
-    result.password = undefined;
-    result.username = undefined;
 
-    res.status( 200 ).json( { message: "SuccesFully Updated"} )
+    res.status( 200 ).json( { message: "SuccesFully Updated" } )
   } catch ( err ) {
     console.error( "error for changing password", err )
     res.status( 400 ).send( "cant change password, server error!" );

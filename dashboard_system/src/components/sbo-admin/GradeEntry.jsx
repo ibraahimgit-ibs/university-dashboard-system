@@ -1,36 +1,39 @@
-import { LuChartNoAxesCombined, LuPen } from "react-icons/lu";
-import { BsGraphDownArrow } from "react-icons/bs";
-import Card from './../items/Card';
-import { useRecoilState } from "recoil";
-import { gradeEntryClickedDataState, gradeEntryWindowState, userDataState } from "../../atom/atom";
 import { useState } from "react";
-import useStudent from "../../hooks/useStudent";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import EditGradeWindow from "./comp/EditGradeWindow";
-import AddGradeModal from "./comp/AddGradeModal";
-import DeleteModal from "./comp/DeleteModal";
+import { BsGraphDownArrow } from "react-icons/bs";
+import { FaArrowDownWideShort, FaArrowUpRightDots } from "react-icons/fa6";
 import { FiPlus } from "react-icons/fi";
 import { IoSchool } from "react-icons/io5";
-import { FaArrowDownWideShort, FaArrowUpRightDots } from "react-icons/fa6";
+import { LuChartNoAxesCombined, LuPen } from "react-icons/lu";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { useRecoilState } from "recoil";
+import { gradeEntryClickedDataState, gradeEntryWindowState, userDataState } from "../../atom/atom";
+import useStudent from "../../hooks/useStudent";
+import Card from './../items/Card';
+import AddGradeModal from "./comp/AddGradeModal";
+import DeleteModal from "./comp/DeleteModal";
+import EditGradeWindow from "./comp/EditGradeWindow";
 
 
 
 const GradeEntry = () => {
-  const [selected, setSelected] = useState( null );
-  const [open, setOpen] = useState( false );
+  const [isclass, setIsClass] = useState( "3" );
   const [isOpen, setIsOpen] = useRecoilState( gradeEntryWindowState );
   const [clickedData, setClickedData] = useRecoilState( gradeEntryClickedDataState );
   const [studentData, setStudentData] = useRecoilState( userDataState );
   const [delOpen, setDelOpen] = useState( false );
 
   const grades = Array.isArray( studentData?.grades ) ? studentData.grades : [];
-  const { isOpened, setIsOpened } = useStudent();
+  const { isOpened, setIsOpened, UserData } = useStudent();
 
   const handleClick = () => {
     setIsOpen( !isOpen )
   }
 
-  const studentGrades = grades;
+  const { students } = studentData || {};
+  const classMatched = students?.filter( student => student?.class === isclass );
+  const studentGrades = grades.filter( grade => {
+    return classMatched?.some( student => student?.id === grade?.student_id );
+  } );
 
   function getLetterGrade( percentage ) {
     if ( percentage >= 90 ) return "A";
@@ -56,6 +59,7 @@ const GradeEntry = () => {
   const passCount = grades.filter( g => Number( g?.grade ) >= 50 ).length;
   const passRate = grades.length > 0 ? Math.round( ( passCount / grades.length ) * 100 ) : 0;
   const failRate = grades.length > 0 ? Math.round( 100 - passRate ) : 0;
+
 
 
   return (
@@ -99,12 +103,17 @@ const GradeEntry = () => {
         </div>
 
         <div>
-          <select className="border border-gray-400 rounded-2xl outline-0 font-semibold mt-3 p-1 px-2">
-            <option value="">Select Class</option>
-            <option value="">Class 1</option>
-            <option value="">Class 2</option>
-            <option value="">Class 3</option>
-            <option value="">Class 4</option>
+          <select
+            className="border border-gray-400 rounded-xl outline-0 mt-3 font-semibold p-1 px-2"
+            onChange={( e ) => setIsClass( e.target.value )}
+          >
+            <optgroup label="Select Class">
+              <option >{isclass !== null ? `Class ${ isclass }` : "Select Class"}</option>
+              <option value="1">Class 1</option>
+              <option value="2">Class 2</option>
+              <option value="3">Class 3</option>
+              <option value="4">Class 4</option>
+            </optgroup>
           </select>
         </div>
 

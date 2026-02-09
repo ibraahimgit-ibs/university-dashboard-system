@@ -82,10 +82,10 @@ const Selection = ( { students } ) => {
                             setSelected( st );
                             setOpen( false );
                         }}
-                        className={`flex items-center justify-between cursor-pointer rounded-md px-2 py-1 
+                        className={`flex items-center justify-between border-0 border-b border-gray-400 cursor-pointer rounded-sm my-0.5 px-2 py-1 
                          ${ selected?.f_name === st.f_name ? "bg-gray-200" : "hover:bg-gray-200" }`}
                     >
-                        {st.f_name}
+                        {st.f_name} {st.s_name} {st.l_name}
                         {selected?.f_name === st.f_name && <IoCheckmarkOutline />}
                     </p>
                 ) )}

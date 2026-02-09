@@ -95,7 +95,7 @@ const Students_b = () => {
                 <tbody key={i}>
                   <tr>
                     <td className="font-semibold">{st?.id}</td>
-                    <td>{st?.f_name}</td>
+                    <td className="text-[16px]">{st?.f_name + " " + st?.s_name + " " + st?.l_name}</td>
                     <td>3</td>
                     <td >3.35</td>
                     <td><span className="paid rounded-md font-semibold text-[12px]">Active</span></td>
