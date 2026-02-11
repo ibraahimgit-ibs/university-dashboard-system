@@ -43,7 +43,7 @@ const ProfileCard = () => {
             >{nickName}</button>
 
             {show && UserData?.role === "student" &&
-                <div className="absolute right-5 text-sm rounded-xl w-60 p-0 py-1 m-2 z-10 shadow-lg bg-white shadow-gray-300 border border-gray-200 transition">
+                <div className="darkDiv absolute right-5 text-sm rounded-xl w-60 p-0 py-1 m-2 z-10 shadow-lg bg-white shadow-gray-300 border border-gray-200 transition">
                     <div className="w-full pb-3 px-3">
                         <h1 className="font-semibold text-md">ID: {student?.id}</h1>
                         <p className="text-gray-500 text-sm">{student?.f_name} {student?.s_name} {student?.l_name}</p>

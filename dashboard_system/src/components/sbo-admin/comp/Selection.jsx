@@ -59,7 +59,7 @@ const Selection = ( { students } ) => {
         <div>
             <h1 className="font-semibold">Select Student</h1>
             <div
-                className="bg-gray-200 flex items-center justify-between rounded-md p-1 px-2 mb-3 min-w-15 max-w-md"
+                className="darkDiv border border-gray-400 bg-gray-200 flex items-center justify-between rounded-md p-1 px-2 mb-3 min-w-15 max-w-md"
                 onClick={() => setOpen( !open )}
             >
                 <input
@@ -74,7 +74,7 @@ const Selection = ( { students } ) => {
                 </div>
             </div>
 
-            {open && <div className="bg-white z-10 rounded-md my-2 p-1 px-2 min-w-60 max-w-md shadow shadow-gray-300">
+            {open && <div className="darkDiv bg-white z-10 rounded-md my-2 p-1 px-2 min-w-60 max-w-md shadow shadow-gray-300">
                 {Array.isArray( students ) && students.map( ( st, i ) => (
                     <p
                         key={i}
@@ -82,16 +82,16 @@ const Selection = ( { students } ) => {
                             setSelected( st );
                             setOpen( false );
                         }}
-                        className={`flex items-center justify-between border-0 border-b border-gray-400 cursor-pointer rounded-sm my-0.5 px-2 py-1 
-                         ${ selected?.f_name === st.f_name ? "bg-gray-200" : "hover:bg-gray-200" }`}
+                        className={`selectionNames flex items-center justify-between border-0 border-b border-gray-400 cursor-pointer rounded-sm my-0.5 px-2 py-1 
+                         ${ selected?.f_name === st.f_name ? "bg-gray-200 selectionBG" : "hover:bg-gray-200" }`}
                     >
                         {st.f_name} {st.s_name} {st.l_name}
-                        {selected?.f_name === st.f_name && <IoCheckmarkOutline />}
+                        {selected?.f_name === st.f_name && <IoCheckmarkOutline className="text-green-500" />}
                     </p>
                 ) )}
             </div>}
 
-            {selected !== null && <div className="bg-gray-100 border border-gray-300 rounded-xl h-full w-full p-3 md:px-6 sm:px-3 flex flex-col gap-5">
+            {selected !== null && <div className="darkDiv bg-gray-100 border border-gray-300 rounded-xl h-full w-full p-3 md:px-6 sm:px-3 flex flex-col gap-5">
                 <h1 className="font-semibold">Student Information</h1>
                 <div className="grid grid-cols-3 mb-3">
                     <div>
@@ -110,16 +110,16 @@ const Selection = ( { students } ) => {
             </div>}
 
             {selected !== null && <div className="my-5">
-                <div className="flex items-center justify-between">
+                <div className="darkDiv flex items-center justify-between">
                     <h1 className="font-semibold">Current Grades</h1>
                     <button
                         onClick={() => setIsOpened( !isOpened )}
-                        className="bg-black text-white flex items-center gap-2 p-1 px-2 rounded-md font-semibold">
+                        className="darkBTN bg-black text-white flex items-center gap-2 p-1 px-2 rounded-md font-semibold">
                         <FiPlus /> Add grade
                     </button>
                 </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full mt-6 text-sm" >
+                <div className="darkDiv overflow-x-auto">
+                    <table className="darkDiv w-full mt-6 text-sm" >
                         <thead>
                             <tr>
                                 <th>Subjects</th>
@@ -149,7 +149,7 @@ const Selection = ( { students } ) => {
                                                     setClickedData( 0 );
                                                     setClickedData( [grade?.student_id, grade?.subject_id, grade?.term_id, grade?.grade, grade?.subject, grade?.id] );
                                                 }}
-                                                className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
+                                                className="darkAction p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
                                                 <LuPen className="h-5 w-4" />
                                             </div>
                                             <div
@@ -158,7 +158,7 @@ const Selection = ( { students } ) => {
                                                     setClickedData( [grade?.student_id, grade?.subject_id, grade?.term_id, grade?.grade, grade?.subject, grade?.id] );
                                                     setDelOpen( !delOpen );
                                                 }}
-                                                className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
+                                                className="darkAction p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
                                                 <RiDeleteBin5Line className="h-5 w-4" />
                                             </div>
                                         </td>

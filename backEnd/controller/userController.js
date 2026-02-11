@@ -24,10 +24,12 @@ export const studentData = async ( req, res ) => {
 
     let studentsResult;
     let GradesResult;
+    let UsersResult;
 
     // ================= ADMIN =================
     if ( role === "admin" || role === "teacher" ) {
       studentsResult = await pool.query( 'SELECT * FROM students' );
+      UsersResult = await pool.query( 'SELECT * FROM users' );
 
       GradesResult = await pool.query( `
         SELECT s.f_name,
@@ -96,7 +98,8 @@ export const studentData = async ( req, res ) => {
 
     res.json( {
       students: studentsResult.rows,
-      grades: GradesResult.rows
+      grades: GradesResult.rows,
+      users: UsersResult ? UsersResult.rows : []
     } );
 
   } catch ( err ) {
@@ -188,8 +191,10 @@ export const registStudent = async ( req, res ) => {
       );
     }
 
+    const students = await client.query( "SELECT * FROM students" );
+
     await client.query( "COMMIT" );
-    res.status( 201 ).send( "Registered Successfully" );
+    res.status( 201 ).json( { message: "Registered Successfully", students: students.rows } );
   } catch ( error ) {
     await client.query( "ROLLBACK" );
     if ( error.constraint === "users_role_check" ) {

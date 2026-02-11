@@ -17,7 +17,7 @@ const Dashboard = () => {
   }
 
   const [selected, setSelected] = useState( btn_selected );
-  const [userData, __] = useRecoilState( userDataState );  
+  const [userData, __] = useRecoilState( userDataState );
 
 
   return (
@@ -45,9 +45,12 @@ const Dashboard = () => {
           onClick={() => setSelected( { ...selected, a: false, b: false, c: true } )}
         >Reports</button>
       </div>
+
       <div>
         {selected.a && <GradeEntry_a />}
-        {selected.b && <Students_b />}
+        <div className="border border-gray-300 rounded-xl p-5 my-6">
+          {selected.b && <Students_b />}
+        </div>
         {selected.c && <Reports_c />}
       </div>
     </div>

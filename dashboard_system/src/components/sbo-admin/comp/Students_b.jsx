@@ -45,7 +45,7 @@ const Students_b = () => {
 
   return (
     <div>
-      <div className="border border-gray-300 rounded-xl p-5 my-6">
+      <div>
         <div>
           <h2 className="font-semibold">Student Directory</h2>
           <p className="text-gray-500">View and manage student information</p>

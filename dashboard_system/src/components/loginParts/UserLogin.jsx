@@ -100,8 +100,8 @@ const UserLogin = () => {
     };
 
     return (
-        <div className="w-full max-w-md rounded-2xl bg-white p-8 mt-10 md:shadow-md sm:shadow-none">
-            <div className="mb-8 text-center">
+        <div className="darkDiv w-full max-w-md rounded-2xl bg-white p-8 mt-10 md:shadow-md sm:shadow-none">
+            <div className="darkDiv mb-8 text-center">
                 <h1 className="text-3xl font-bold text-slate-800">Welcome Back</h1>
                 <p className="text-slate-500">Please enter your details</p>
             </div>
@@ -183,7 +183,7 @@ const UserLogin = () => {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    className="w-full rounded-lg bg-indigo-600 py-3 font-bold text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 active:scale-[0.98]"
+                    className="darkBTN w-full rounded-lg bg-indigo-600 py-3 font-bold text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 active:scale-[0.98]"
                 >
                     {loading ? "Log In..." : "Log In"}
                 </button>

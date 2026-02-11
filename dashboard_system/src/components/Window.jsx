@@ -3,6 +3,7 @@ import StudentWindow from "./items/window_items/StudentWindow";
 import { roleMethodState } from "../atom/atom";
 import SboAdminWindow from "./items/window_items/SboAdminWindow";
 import { useStudent } from "../hooks/useStudent";
+import RegistrarAdminWindow from "./items/window_items/RegistrarAdminWindow";
 
 const Window = () => {
   const [roleMethod] = useRecoilState( roleMethodState );
@@ -13,6 +14,7 @@ const Window = () => {
       <div>
         {roleMethod.student && UserData?.role === "student" && <StudentWindow />}
         {roleMethod.sbo_admin && <SboAdminWindow />}
+        {roleMethod.registrar_admin && <RegistrarAdminWindow />}
       </div>
       <hr className="text-gray-300" />
     </div>

@@ -80,7 +80,7 @@ const AddGradeModal = () => {
                 aria-describedby="modal-modal-description"
             >
                 <div style={style} className='bg-white p-4 rounded-md shadow-lg'>
-                    <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white rounded-md p-6 space-y-4" >
+                    <form onSubmit={handleSubmit} className="darkDiv max-w-md mx-auto bg-white rounded-md p-6 space-y-4" >
                         <h2 className="text-2xl font-bold text-gray-700 text-center">Add Grade</h2>
 
                         <input
@@ -121,7 +121,7 @@ const AddGradeModal = () => {
 
                         <button
                             type="submit"
-                            className="w-full bg-blue-600 text-white py-2 font-bold rounded hover:bg-blue-700 transition"
+                            className="darkBTN w-full bg-blue-600 text-white py-2 font-bold rounded hover:bg-blue-700 transition"
                         >
                             Save Grade
                         </button>

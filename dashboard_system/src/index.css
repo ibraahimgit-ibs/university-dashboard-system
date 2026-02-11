@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tailwind-scrollbar-hide/v4";
+@import 'tailwindcss';
+@import 'tailwind-scrollbar-hide/v4';
 
 @layer base {
   * {
@@ -60,7 +60,7 @@
   }
 
   .up_ex_divs {
-    @apply flex items-center gap-2 border border-gray-300 px-1 py-0.5 rounded-md font-semibold cursor-pointer transition-all;
+    @apply flex items-center gap-2 border border-gray-300 px-1 py-0.5 md:text-[15px] sm:text-[11px] rounded-md font-semibold cursor-pointer transition-all;
   }
 
   .form_control {
@@ -75,8 +75,16 @@
     @apply bg-gray-100 w-full py-1.5 px-3 outline-0 rounded-md outline-gray-300 focus:outline-5 transition duration-500;
   }
 
-  .loginbtn{
+  .loginbtn {
     @apply text-start p-2 bg-gray-100 rounded-md;
+  }
+
+  .add_user_form_control {
+    @apply w-full rounded-lg border border-slate-300 p-3 mt-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200;
+  }
+
+  .errorMessage {
+    @apply text-red-500 text-sm self-start mb-2;
   }
 }
 
@@ -97,10 +105,27 @@ body {
     color: #ffffff;
   }
 
-  /* div {
+  .darkDiv {
     background: #000000;
     color: white;
-  } */
+  }
+
+  .darkBTN {
+    background: blue;
+    color: white;
+  }
+
+  .darkBTN:hover {
+    background: rgb(63, 63, 223);
+    color: white;
+  }
+
+  .darkAction:hover {
+    background: rgb(103, 103, 103);
+    color: white;
+  }
+
+  /* _______________ */
 
   button {
     color: black;
@@ -247,6 +272,15 @@ body {
   .form_btn,
   .form_H {
     color: black;
+  }
+
+  .selectionNames:hover {
+    background: rgb(58, 58, 58);
+    color: white;
+  }
+  .selectionBG {
+    background-color: rgb(58, 58, 58);
+    color: white;
   }
 }
 /* ****************************Dark mode********************** */

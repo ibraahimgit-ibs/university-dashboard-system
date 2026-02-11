@@ -3,6 +3,7 @@ import { roleMethodState, showMenu } from "../atom/atom";
 import StudentWindow from "./items/window_items/StudentWindow";
 import SboAdminWindow from "./items/window_items/SboAdminWindow";
 import { RxCrossCircled } from "react-icons/rx";
+import RegistrarAdminWindow from "./items/window_items/RegistrarAdminWindow";
 
 const SideBar = () => {
     const [shoWmenu, setSHoWmenu] = useRecoilState( showMenu );
@@ -29,6 +30,7 @@ const SideBar = () => {
                     </div>
                     {roleMethod.student && <StudentWindow />}
                     {roleMethod.sbo_admin && <SboAdminWindow />}
+                    {roleMethod.registrar_admin && <RegistrarAdminWindow />}
                 </div>
             </div>
         </>

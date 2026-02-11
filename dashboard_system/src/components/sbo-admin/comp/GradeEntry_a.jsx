@@ -15,8 +15,8 @@ const GradeEntry_a = () => {
           <p className="text-gray-500">Enter and manage student grades</p>
         </div>
         <div className="flex space-x-3">
-          <div className="up_ex_divs"><MdOutlineFileUpload /> Bulk Upload</div>
-          <div className="up_ex_divs"><MdOutlineFileDownload /> Export</div>
+          <div className="up_ex_divs darkBTN"><MdOutlineFileUpload /> Bulk Upload</div>
+          <div className="up_ex_divs darkBTN"><MdOutlineFileDownload /> Export</div>
         </div>
       </div>
       <div>

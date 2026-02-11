@@ -64,7 +64,7 @@ const GradeEntry = () => {
 
   return (
     <div>
-      <div>
+      <div className="darkDiv">
         <h1 className="font-semibold text-[20px]">Student Grade Entry Management</h1>
         <p className="text-gray-500">Manage and see Grades from last Year</p>
       </div>
@@ -91,7 +91,7 @@ const GradeEntry = () => {
         />
       </div>
 
-      <div className="bg-white z-10 border border-gray-300 rounded-md my-2 py-3 px-2 min-w-full max-w-full shadow shadow-gray-300">
+      <div className="darkDiv bg-white z-10 border border-gray-300 rounded-md my-2 py-3 px-2 min-w-full max-w-full shadow shadow-gray-300">
 
         <div className="flex items-center justify-between">
           <h1 className="font-semibold">Full Current Grades</h1>
@@ -104,7 +104,7 @@ const GradeEntry = () => {
 
         <div>
           <select
-            className="border border-gray-400 rounded-xl outline-0 mt-3 font-semibold p-1 px-2"
+            className="darkDiv border border-gray-400 rounded-xl outline-0 my-3 font-semibold p-1 px-2"
             onChange={( e ) => setIsClass( e.target.value )}
           >
             <optgroup label="Select Class">
@@ -117,8 +117,8 @@ const GradeEntry = () => {
           </select>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full mt-6 text-sm" >
+        <div className="darkDiv overflow-x-auto">
+          <table className="darkDiv w-full mt-6 text-sm" >
             <thead>
               <tr>
                 <th>ST_Name</th>
@@ -150,7 +150,7 @@ const GradeEntry = () => {
                           setClickedData( 0 );
                           setClickedData( [grade?.student_id, grade?.subject_id, grade?.term_id, grade?.grade, grade?.subject, grade?.id] );
                         }}
-                        className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
+                        className="darkAction p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
                         <LuPen className="h-5 w-4" />
                       </div>
                       <div
@@ -159,7 +159,7 @@ const GradeEntry = () => {
                           setClickedData( [grade?.student_id, grade?.subject_id, grade?.term_id, grade?.grade, grade?.subject, grade?.id] );
                           setDelOpen( !delOpen );
                         }}
-                        className="p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
+                        className="darkAction p-2 w-9 flex items-center justify-center rounded-lg hover:bg-gray-200 transition">
                         <RiDeleteBin5Line className="h-5 w-4" />
                       </div>
                     </td>

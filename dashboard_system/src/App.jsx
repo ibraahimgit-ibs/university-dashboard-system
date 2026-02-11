@@ -76,7 +76,23 @@ function App() {
         <PagesMain />
         {show && <SideBar />}
       </main>
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          success: {
+            style: {
+              background: "#e6ffe6",
+              color: "#000000",
+            },
+          },
+          error: {
+            style: {
+              background: "#ffe6e6",
+              color: "#8b0000",
+            },
+          },
+        }}
+      />
+
       {loadingCircle && <CircularUnderLoad />}
     </div>
   );

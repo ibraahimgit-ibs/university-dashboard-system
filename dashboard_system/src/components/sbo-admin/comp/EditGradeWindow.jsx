@@ -64,28 +64,19 @@ const EditGradeWindow = () => {
                     <p className="font-semibold mt-3 text-sm text-gray-600">Grade (%)</p>
                     <input
                         type="number"
-                        className="edit_grade_window_inputs"
+                        className="edit_grade_window_inputs paymodaldiv"
                         placeholder="Enter New Grade"
                         autoFocus
                         value={newgrade}
                         onChange={( e ) => setNewgrade( e.target.value )}
                     />
 
-                    {/* <p className="font-semibold mt-3 text-sm text-gray-600">Term (type 1 or 2)</p>
-                    <input
-                        type="text"
-                        className="edit_grade_window_inputs"
-                        placeholder="Enter Term (type 1 or 2)"
-                        value={newTerm}
-                        onChange={( e ) => setNewTerm( e.target.value )}
-                    /> */}
-
                     <p className="font-semibold mt-3 text-sm text-gray-600">Updating Subject</p>
                     <input
                         type="text"
                         value={clickedData[4]}
                         readOnly
-                        className="edit_grade_window_inputs"
+                        className="edit_grade_window_inputs paymodaldiv"
                     />
                     <div className="flex items-center justify-end mt-5 space-x-3">
                         <button
@@ -94,7 +85,7 @@ const EditGradeWindow = () => {
                         >Cancel
                         </button>
                         <button
-                            className="btn2 w-36 h-9 px-2 border bg-black text-white border-gray-300 rounded-md hover:bg-[#000000de] transition"
+                            className="darkBTN w-36 h-9 px-2 border bg-black text-white border-gray-300 rounded-md hover:bg-[#000000de] transition"
                             onClick={() => {
                                 handleSave();
                             }}
